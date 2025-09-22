@@ -1,1 +1,78 @@
 /* You can add global styles to this file, and also import other style files */
+
+
+.me-1 {
+    margin-right: 5px;
+}
+
+.me-2 {
+    margin-right: 10px;
+}
+
+.me-3 {
+    margin-right: 15px;
+}
+
+.me-5{
+    margin-right: 25px;
+}
+
+.mt-1 {
+    margin-top: 5px;
+}
+
+.mt-2 {
+    margin-top: 10px;
+}
+
+.mt-3 {
+    margin-top: 15px;
+}
+
+.mb-1 {
+    margin-bottom: 5px;
+}
+
+.mb-2 {
+    margin-bottom: 10px;
+}
+
+.mb-3 {
+    margin-bottom: 15px;
+}
+
+.text-danger {
+    color: #ff4d4f;
+}
+
+.text-warning {
+    color: #faad14;
+}
+
+.text-info {
+    color: #0dcaf0;
+}
+
+.ant-btn-icon-only{
+    height: 32.44px;
+}
+
+nz-date-picker, nz-time-picker{
+    width: 100%;
+}
+
+.desktop-only {
+    display: none;
+  
+    @media (min-width: 1250px) {
+      display: block;
+    }
+  }
+  
+  .mobile-only {
+    display: block;
+  
+    @media (min-width: 1250px) {
+      display: none;
+    }
+  }

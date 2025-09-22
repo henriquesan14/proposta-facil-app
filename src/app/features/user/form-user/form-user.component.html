@@ -1,0 +1,76 @@
+<div>
+    <form nz-form [formGroup]="userForm" (ngSubmit)="submitForm()">
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>
+                <span>Name</span>
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Por favor, insira o nome do usuário.">
+                <input nz-input id="name" formControlName="name" placeholder="Name" maxlength="30" />
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="username" nzRequired>
+                <span>Username</span>
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="
+            userForm.get('username')?.hasError('required') ? 'Por favor, insira o username.' :
+            userForm.get('username')?.hasError('minlength') ? 'O username deve ter pelo menos 6 caracteres.' :
+            userForm.get('username')?.hasError('pattern') ? 'Username inválido. Use apenas letras, números, hífen e underline.' :
+            ''
+          ">
+                <input autocomplete="username" nz-input id="username" formControlName="username" placeholder="Username" maxlength="30" />
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="password" [nzRequired]="!isEditing">
+                <span>{{passwordLabel}}</span>
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="
+    userForm.get('password')?.hasError('required') ? 'Por favor, insira a senha do usuário.' :
+    userForm.get('password')?.hasError('minlength') ? 'A senha deve ter no mínimo 6 caracteres.' : ''
+">
+                <input autocomplete="new-password" nz-input type="password" id="password" formControlName="password" placeholder="Password"
+                    maxlength="30" />
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="confirmPassword" [nzRequired]="!isEditing">
+                <span>Confirm Password</span>
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="
+    userForm.get('confirmPassword')?.hasError('required') ? 'Confirme a senha.' :
+    userForm.get('confirmPassword')?.hasError('notMatch') ? 'As senhas não coincidem.' : ''
+">
+                <input autocomplete="new-password" nz-input type="password" id="confirmPassword" formControlName="confirmPassword"
+                    placeholder="Confirm Password" maxlength="30" />
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="groupId" nzRequired>
+                <span>Group</span>
+            </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Por favor, selecione um grupo.">
+                <nz-space [nzAlign]="'start'" [nzWrap]="false">
+                    <nz-select formControlName="groupId" class="groupSelect" [nzId]="'groupId'" style="min-width: 200px">
+                      <nz-option nzLabel="Selecione..." [nzValue]="''"></nz-option>
+                      @for(group of groups; track group){
+                        <nz-option [nzLabel]="group" [nzValue]="group"></nz-option>
+                      }
+                    </nz-select>
+                  </nz-space>
+            </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-row class="register-area">
+            <nz-form-control [nzSpan]="14" [nzOffset]="6">
+                <button nz-button nzType="primary" [nzLoading]="isSubmitting">
+                    {{ data && data.userToEdit ? 'Editar' : 'Cadastrar' }}
+                </button>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</div>
