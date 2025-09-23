@@ -13,6 +13,7 @@ import { provideToastr } from 'ngx-toastr';
 import { CredentialsInterceptor } from './core/interceptors/credentials.interceptor';
 import { AccessTokenInterceptor } from './core/interceptors/access-token.interceptor';
 import { ErrorHandlerInterceptor } from './core/interceptors/error-handle.interceptor';
+import { provideNgxMask } from 'ngx-mask';
 
 registerLocaleData(pt);
 
@@ -26,8 +27,10 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(), 
     provideNzI18n(pt_BR), 
     provideHttpClient(),
+    provideNgxMask(),
     provideNzIcons([UserOutline, LockOutline, MenuFoldOutline, SettingOutline, LogoutOutline, CloseOutline, SearchOutline, PlusCircleOutline]),
     provideAnimationsAsync(),
     provideToastr(),
   ]
 };
+

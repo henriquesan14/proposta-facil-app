@@ -17,11 +17,14 @@ import { BtnPesquisarComponent } from '../../../shared/components/btn-pesquisar/
 import { BtnLimparComponent } from '../../../shared/components/btn-limpar/btn-limpar.component';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { BtnNovoComponent } from '../../../shared/components/btn-novo/btn-novo.component';
+import { PhonePipe } from '../../../shared/pipes/phone-pipe.pipe';
 
 @Component({
   selector: 'app-list-users',
   standalone: true,
-  imports: [NzTableModule, NzButtonModule, NzIconModule, NzModalModule, NzTooltipModule, ReactiveFormsModule, NzFormModule, NzPaginationModule, BtnPesquisarComponent, BtnLimparComponent, NzInputModule, BtnNovoComponent],
+  imports: [NzTableModule, NzButtonModule, NzIconModule, NzModalModule, NzTooltipModule, ReactiveFormsModule, NzFormModule, NzPaginationModule, BtnPesquisarComponent, BtnLimparComponent, NzInputModule, BtnNovoComponent,
+    PhonePipe
+  ],
   templateUrl: './list-users.component.html',
   styleUrl: './list-users.component.css'
 })
@@ -32,7 +35,7 @@ export class ListUsersComponent implements OnInit, OnDestroy {
     private toastr = inject(ToastrService);
     constructor(private userService: UserService, private formBuilder: FormBuilder){
       this.filtroForm = this.formBuilder.group({
-        name: [null]
+        nameFilter: [null]
       });
     }
     filtroForm!: FormGroup;
@@ -57,7 +60,7 @@ export class ListUsersComponent implements OnInit, OnDestroy {
       var params = {
         pageNumber: this.paginatedUsers.pageNumber,
         pageSize: this.paginatedUsers.pageSize,
-        ...this.filtroForm.value
+        name: this.filtroForm.get('nameFilter')?.value
       };
       this.isLoading = true;
       this.userService.getUsers(params)
@@ -102,7 +105,7 @@ export class ListUsersComponent implements OnInit, OnDestroy {
       this.refreshCheckedStatus();
     }
   
-    openNewPlayerModal(): void {
+    openNewUserModal(): void {
       const modal = this.modal.create({
         nzTitle: 'Cadastrar usuário',
         nzContent: FormUserComponent,
@@ -117,7 +120,7 @@ export class ListUsersComponent implements OnInit, OnDestroy {
       });
     }
   
-    openEditPlayerModal(user: User): void {
+    openEditUserModal(user: User): void {
       const modal = this.modal.create({
         nzTitle: 'Editar usuário',
         nzContent: FormUserComponent,
@@ -156,25 +159,6 @@ export class ListUsersComponent implements OnInit, OnDestroy {
               this.getUsers();
             }
           })
-      });
-    }
-  
-    showConfirmDeleteBatch(): void {
-      this.confirmModal = this.modal.confirm({
-        nzTitle: 'Exclusão',
-        nzContent: 'Tem certeza que quer remover os usuários selecionados?',
-        nzOnOk: () =>
-         this.deletarPlayersBatch()
-      });
-    }
-  
-    deletarPlayersBatch() {
-      const userIds = this.paginatedUsers.data.filter(data => this.setOfCheckedId.has(data.id)).map(p => p.id);
-      this.userService.deleteUsersBatch(userIds).subscribe({
-        next: () => {
-          this.toastr.success('Usuários removidos!', 'Sucesso');
-          this.getUsers();
-        }
       });
     }
 

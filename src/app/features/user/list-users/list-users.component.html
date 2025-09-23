@@ -1,15 +1,15 @@
 <div class="container">
   <div style="display: flex;">
     <h2 nz-title class="text-center me-2">Usuários</h2>
-    <btn-novo title="Novo usuário" (clickEvent)="openNewPlayerModal()">
+    <btn-novo title="Novo usuário" (clickEvent)="openNewUserModal()">
     </btn-novo>
   </div>
 
   <form nz-form [formGroup]="filtroForm" (ngSubmit)="getUsers()" nzLayout="vertical">
     <div nz-row [nzGutter]="16">
       <div nz-col [nzXs]="24" [nzMd]="12">
-        <label for="nome">Nome</label>
-        <input formControlName="name" id="name" placeholder="Nome" nz-input />
+        <label for="nameFilter">Nome</label>
+        <input formControlName="nameFilter" id="nameFilter" placeholder="Nome" nz-input />
       </div>
     </div>
     <div nz-row class="mt-2 mb-2">
@@ -43,11 +43,11 @@
       <tr>
         <td>{{ user.name }}</td>
         <td>{{ user.email }}</td>
-        <td>{{ user.phoneNumber }}</td>
+        <td>{{ user.phoneNumber | phone }}</td>
         <td>{{ user.role }}</td>
         <td>
           <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1" nz-button
-            nzType="primary" (click)="openEditPlayerModal(user)">
+            nzType="primary" (click)="openEditUserModal(user)">
             <span nz-icon nzType="edit"></span>
           </button>
           <button hasRole="DELETE_USER" nz-tooltip nzTooltipTitle="Excluir" nzTooltipPlacement="top" nz-button

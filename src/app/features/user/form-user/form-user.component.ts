@@ -14,12 +14,12 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { ConfirmPasswordValidators } from '../../../shared/validators/confirm-password.validator';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzDrawerModule, NzDrawerService } from 'ng-zorro-antd/drawer';
+import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
   selector: 'app-form-user',
   standalone: true,
-  imports: [ReactiveFormsModule, NzFormModule, NzSelectModule, NzButtonModule, NzInputModule, NzSpaceModule, NzTooltipModule, NzIconModule, NzDrawerModule],
+  imports: [ReactiveFormsModule, NzFormModule, NzSelectModule, NzButtonModule, NzInputModule, NzSpaceModule, NzTooltipModule, NzIconModule, NgxMaskDirective],
   templateUrl: './form-user.component.html',
   styleUrl: './form-user.component.css'
 })
@@ -27,11 +27,23 @@ export class FormUserComponent implements OnInit, OnDestroy {
     private fb = inject(NonNullableFormBuilder);
     private userService = inject(UserService);
     private toastr = inject(ToastrService);
-    private drawerService = inject(NzDrawerService);
     private destroy$ = new Subject<void>();
     isSubmitting = false;
 
-    groups: string[] = ['Admin', 'Usuario'];
+    groups: any[] = [
+      {
+        name: 'Admin',
+        value: 2,
+      },
+      {
+        name: 'Sales',
+        value: 3,
+      },
+      {
+        name: 'Viewer',
+        value: 4,
+      }
+    ];
   
     constructor(private modalRef: NzModalRef, @Inject(NZ_MODAL_DATA) public data: { userToEdit: User }) {}
   
@@ -40,8 +52,8 @@ export class FormUserComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
       this.userForm = this.fb.group({
         name: [null, Validators.required],
-        email: [null, [Validators.required, Validators.minLength(6), Validators.email]],
-        phoneNumber: [null, [Validators.required, Validators.minLength(6)]],
+        email: [null, [Validators.required, Validators.email]],
+        phoneNumber: [null, [Validators.required, Validators.minLength(11)]],
         password: [null, this.data?.userToEdit ? null : [Validators.required, Validators.minLength(6)]],
         confirmPassword: [null, this.data?.userToEdit ? null : [Validators.required]],
         role:['', Validators.required],

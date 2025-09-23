@@ -1,8 +1,8 @@
 export interface CreateUser {
     id: string;
     name: string;
-    username: string;
+    email: string;
+    phoneNumber: string;
     password: string;
-    confirmPassword: string;
-    group: string;
+    role: string;
 }
