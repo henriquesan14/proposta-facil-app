@@ -6,10 +6,27 @@
   </div>
 
   <form nz-form [formGroup]="filtroForm" (ngSubmit)="getUsers()" nzLayout="vertical">
-    <div nz-row [nzGutter]="16">
-      <div nz-col [nzXs]="24" [nzMd]="12">
-        <label for="nameFilter">Nome</label>
-        <input formControlName="nameFilter" id="nameFilter" placeholder="Nome" nz-input />
+    <div nz-row [nzGutter]="12">
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label for="nameFilter">Nome</nz-form-label>
+          <nz-form-control>
+            <input formControlName="nameFilter" id="nameFilter" placeholder="Nome" nz-input />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label for="role">Role</nz-form-label>
+          <nz-form-control>
+            <nz-select id="role" formControlName="role">
+              <nz-option [nzValue]="''" nzLabel="Todas"></nz-option>
+              @for(role of roles; track $index){
+              <nz-option [nzValue]="role" [nzLabel]="role"></nz-option>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
       </div>
     </div>
     <div nz-row class="mt-2 mb-2">
@@ -21,7 +38,7 @@
   </form>
 
   <div class="d-flex justify-content-between align-items-center p-2 mb-2">
-    <nz-pagination nzSize="small" [nzTotal]="paginatedUsers.count" [(nzPageIndex)]="paginatedUsers.pageNumber"
+    <nz-pagination nzSize="small" [nzTotal]="paginatedUsers.count" [(nzPageIndex)]="paginatedUsers.pageIndex"
       [nzPageSize]="paginatedUsers.pageSize" (nzPageIndexChange)="onPageChange($event)"
       (nzPageSizeChange)="onPageSizeChange($event)" [nzShowSizeChanger]="true" [nzPageSizeOptions]="[2,5,10]"
       style="max-width: 600px; width: 100%;">

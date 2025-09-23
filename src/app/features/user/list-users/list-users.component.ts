@@ -18,12 +18,13 @@ import { BtnLimparComponent } from '../../../shared/components/btn-limpar/btn-li
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { BtnNovoComponent } from '../../../shared/components/btn-novo/btn-novo.component';
 import { PhonePipe } from '../../../shared/pipes/phone-pipe.pipe';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 @Component({
   selector: 'app-list-users',
   standalone: true,
   imports: [NzTableModule, NzButtonModule, NzIconModule, NzModalModule, NzTooltipModule, ReactiveFormsModule, NzFormModule, NzPaginationModule, BtnPesquisarComponent, BtnLimparComponent, NzInputModule, BtnNovoComponent,
-    PhonePipe
+    PhonePipe, NzSelectModule
   ],
   templateUrl: './list-users.component.html',
   styleUrl: './list-users.component.css'
@@ -35,10 +36,12 @@ export class ListUsersComponent implements OnInit, OnDestroy {
     private toastr = inject(ToastrService);
     constructor(private userService: UserService, private formBuilder: FormBuilder){
       this.filtroForm = this.formBuilder.group({
-        nameFilter: [null]
+        nameFilter: [null],
+        role: ['']
       });
     }
     filtroForm!: FormGroup;
+    roles = ['AdminTenant', 'Sales', 'Viewer'];
 
     checked = false;
     indeterminate = false;
@@ -58,9 +61,10 @@ export class ListUsersComponent implements OnInit, OnDestroy {
   
     getUsers(){
       var params = {
-        pageNumber: this.paginatedUsers.pageNumber,
+        pageIndex: this.paginatedUsers.pageIndex,
         pageSize: this.paginatedUsers.pageSize,
-        name: this.filtroForm.get('nameFilter')?.value
+        name: this.filtroForm.get('nameFilter')?.value,
+        role: this.filtroForm.get('role')?.value
       };
       this.isLoading = true;
       this.userService.getUsers(params)
@@ -78,31 +82,10 @@ export class ListUsersComponent implements OnInit, OnDestroy {
         })
     }
   
-  
-    updateCheckedSet(id: string, checked: boolean): void {
-      if (checked) {
-        this.setOfCheckedId.add(id);
-      } else {
-        this.setOfCheckedId.delete(id);
-      }
-    }
-  
     refreshCheckedStatus(): void {
       const listOfEnabledData = this.paginatedUsers.data.filter(({ disabled }) => !disabled);
       this.checked = listOfEnabledData.every(({ id }) => this.setOfCheckedId.has(id));
       this.indeterminate = listOfEnabledData.some(({ id }) => this.setOfCheckedId.has(id)) && !this.checked;
-    }
-  
-    onItemChecked(id: string, checked: boolean): void {
-      this.updateCheckedSet(id, checked);
-      this.refreshCheckedStatus();
-    }
-  
-    onAllChecked(checked: boolean): void {
-      this.paginatedUsers.data
-        .filter(({ disabled }) => !disabled)
-        .forEach(({ id }) => this.updateCheckedSet(id, checked));
-      this.refreshCheckedStatus();
     }
   
     openNewUserModal(): void {
@@ -139,7 +122,7 @@ export class ListUsersComponent implements OnInit, OnDestroy {
     }
 
     onPageChange(event: number){
-      this.paginatedUsers.pageNumber = event;
+      this.paginatedUsers.pageIndex = event;
       this.getUsers();
     }
 
@@ -164,5 +147,6 @@ export class ListUsersComponent implements OnInit, OnDestroy {
 
     limpar(){
       this.filtroForm.reset();
+      this.filtroForm.get('role')?.setValue('');
     }
 }

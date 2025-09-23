@@ -32,7 +32,7 @@ export class FormUserComponent implements OnInit, OnDestroy {
 
     groups: any[] = [
       {
-        name: 'Admin',
+        name: 'AdminTenant',
         value: 2,
       },
       {
