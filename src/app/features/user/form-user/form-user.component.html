@@ -1,88 +1,112 @@
-<div>
-    <form nz-form [formGroup]="userForm" (ngSubmit)="submitForm()">
-        <nz-form-item>
-            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired>
-                <span>Nome</span>
-            </nz-form-label>
-            <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Por favor, insira o nome do usuário.">
-                <input nz-input id="name" formControlName="name" placeholder="Nome" maxlength="30" />
-            </nz-form-control>
-        </nz-form-item>
+<form nz-form [formGroup]="userForm" (ngSubmit)="submitForm()" nzLayout="vertical">
+    <nz-row [nzGutter]="16">
+        <nz-col [nzSpan]="20">
+            <nz-form-item>
+                <nz-form-label nzFor="name" nzRequired>
+                    <span>Nome</span>
+                </nz-form-label>
+                <nz-form-control nzErrorTip="Por favor, insira o nome do usuário.">
+                    <input nz-input id="name" formControlName="name" placeholder="Nome" maxlength="30" />
+                </nz-form-control>
+            </nz-form-item>
+        </nz-col>
+    </nz-row>
 
-        <nz-form-item>
-            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="email" nzRequired>
-                <span>Email</span>
-            </nz-form-label>
-            <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="
+    <nz-row [nzGutter]="16">
+        <nz-col [nzSpan]="20">
+            <nz-form-item>
+                <nz-form-label nzFor="email" nzRequired>
+                    <span>Email</span>
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]="
             userForm.get('email')?.hasError('required') ? 'Por favor, insira o email.' :
             userForm.get('email')?.hasError('email') ? 'O email não é válido.' : ''
           ">
-                <input autocomplete="email" nz-input id="email" formControlName="email" placeholder="Email"
-                    maxlength="30" />
-            </nz-form-control>
-        </nz-form-item>
+                    <input autocomplete="email" nz-input id="email" formControlName="email" placeholder="Email"
+                        maxlength="30" />
+                </nz-form-control>
+            </nz-form-item>
+        </nz-col>
+    </nz-row>
 
-        <nz-form-item>
-            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber" nzRequired>
-                <span>Telefone</span>
-            </nz-form-label>
-            <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="
+    <nz-row [nzGutter]="16">
+        <nz-col [nzSpan]="20">
+            <nz-form-item>
+                <nz-form-label nzFor="phoneNumber" nzRequired>
+                    <span>Telefone</span>
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]="
             userForm.get('phoneNumber')?.hasError('required') ? 'Por favor, insira o telefone.' :
-            userForm.get('phoneNumber')?.hasError('minlength') ? 'O telefone deve ter 11 caracteres.' : ''
+            userForm.get('phoneNumber')?.hasError('mask') ? 'Telefone inválido.' : ''
           ">
-                <input [mask]="'(00) 00000-0000'" autocomplete="phoneNumber" nz-input id="phoneNumber" formControlName="phoneNumber"
-                    placeholder="Telefone" maxlength="15" />
-            </nz-form-control>
-        </nz-form-item>
+                    <input [mask]="'(00) 00000-0000'" autocomplete="phoneNumber" nz-input id="phoneNumber"
+                        formControlName="phoneNumber" placeholder="Telefone" maxlength="15" />
+                </nz-form-control>
+            </nz-form-item>
+        </nz-col>
+    </nz-row>
 
-        <nz-form-item>
-            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="password" [nzRequired]="!isEditing">
-                <span>{{passwordLabel}}</span>
-            </nz-form-label>
-            <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="
+    <nz-row [nzGutter]="16">
+        <nz-col [nzSpan]="20">
+            <nz-form-item>
+                <nz-form-label nzFor="password" [nzRequired]="!isEditing">
+                    <span>{{passwordLabel}}</span>
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]="
     userForm.get('password')?.hasError('required') ? 'Por favor, insira a senha do usuário.' :
     userForm.get('password')?.hasError('minlength') ? 'A senha deve ter no mínimo 6 caracteres.' : ''
 ">
-                <input autocomplete="new-password" nz-input type="password" id="password" formControlName="password"
-                    placeholder="Senha" maxlength="30" />
-            </nz-form-control>
-        </nz-form-item>
+                    <input autocomplete="new-password" nz-input type="password" id="password" formControlName="password"
+                        placeholder="Senha" maxlength="30" />
+                </nz-form-control>
+            </nz-form-item>
+        </nz-col>
+    </nz-row>
 
-        <nz-form-item>
-            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="confirmPassword" [nzRequired]="!isEditing">
-                <span>Confirm Password</span>
-            </nz-form-label>
-            <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="
+    <nz-row [nzGutter]="16">
+        <nz-col>
+            <nz-form-item>
+                <nz-form-label nzFor="confirmPassword" [nzRequired]="!isEditing">
+                    <span>Confirm Password</span>
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]="
     userForm.get('confirmPassword')?.hasError('required') ? 'Confirme a senha.' :
     userForm.get('confirmPassword')?.hasError('notMatch') ? 'As senhas não coincidem.' : ''
 ">
-                <input autocomplete="new-password" nz-input type="password" id="confirmPassword"
-                    formControlName="confirmPassword" placeholder="Confirmação de senha" maxlength="30" />
-            </nz-form-control>
-        </nz-form-item>
+                    <input autocomplete="new-password" nz-input type="password" id="confirmPassword"
+                        formControlName="confirmPassword" placeholder="Confirmação de senha" maxlength="30" />
+                </nz-form-control>
+            </nz-form-item>
+        </nz-col>
+    </nz-row>
 
-        <nz-form-item>
-            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="role" nzRequired>
-                <span>Role</span>
-            </nz-form-label>
-            <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Por favor, selecione uma role.">
-                <nz-space [nzAlign]="'start'" [nzWrap]="false">
-                    <nz-select formControlName="role" class="groupSelect" [nzId]="'role'" style="min-width: 200px">
-                        <nz-option nzLabel="Selecione..." [nzValue]="''" nzDisabled></nz-option>
-                        @for(group of groups; track group){
-                        <nz-option [nzLabel]="group.name" [nzValue]="group.value"></nz-option>
-                        }
-                    </nz-select>
-                </nz-space>
-            </nz-form-control>
-        </nz-form-item>
+    <nz-row [nzGutter]="16">
+        <nz-col [nzSpan]="20">
+            <nz-form-item>
+                <nz-form-label nzRequired>
+                    <span>Role</span>
+                </nz-form-label>
+                <nz-form-control nzErrorTip="Por favor, selecione uma role.">
+                    <nz-space [nzAlign]="'start'" [nzWrap]="false">
+                        <nz-select formControlName="role" class="groupSelect" [nzId]="'role'" style="min-width: 200px">
+                            <nz-option nzLabel="Selecione..." [nzValue]="''" nzDisabled></nz-option>
+                            @for(group of groups; track group){
+                            <nz-option [nzLabel]="group.name" [nzValue]="group.value"></nz-option>
+                            }
+                        </nz-select>
+                    </nz-space>
+                </nz-form-control>
+            </nz-form-item>
+        </nz-col>
+    </nz-row>
 
-        <nz-form-item nz-row class="register-area">
-            <nz-form-control [nzSpan]="14" [nzOffset]="6">
-                <button nz-button nzType="primary" [nzLoading]="isSubmitting">
-                    {{ data && data.userToEdit ? 'Editar' : 'Cadastrar' }}
-                </button>
-            </nz-form-control>
-        </nz-form-item>
-    </form>
-</div>
+    <nz-form-item nz-row class="register-area">
+        <nz-form-control>
+            <button nz-button nzType="primary">
+                {{ data && data.userId ? 'Editar' : 'Cadastrar' }}
+            </button>
+        </nz-form-control>
+    </nz-form-item>
+</form>
+
+<ngx-spinner type="ball-clip-rotate-multiple"></ngx-spinner>

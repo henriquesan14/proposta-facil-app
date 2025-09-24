@@ -81,13 +81,7 @@ export class ListUsersComponent implements OnInit, OnDestroy {
           }
         })
     }
-  
-    refreshCheckedStatus(): void {
-      const listOfEnabledData = this.paginatedUsers.data.filter(({ disabled }) => !disabled);
-      this.checked = listOfEnabledData.every(({ id }) => this.setOfCheckedId.has(id));
-      this.indeterminate = listOfEnabledData.some(({ id }) => this.setOfCheckedId.has(id)) && !this.checked;
-    }
-  
+
     openNewUserModal(): void {
       const modal = this.modal.create({
         nzTitle: 'Cadastrar usuário',

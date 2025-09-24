@@ -15,11 +15,13 @@ import { ConfirmPasswordValidators } from '../../../shared/validators/confirm-pa
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NgxMaskDirective } from 'ngx-mask';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { FormUtils } from '../../../shared/utils/form.utils';
 
 @Component({
   selector: 'app-form-user',
   standalone: true,
-  imports: [ReactiveFormsModule, NzFormModule, NzSelectModule, NzButtonModule, NzInputModule, NzSpaceModule, NzTooltipModule, NzIconModule, NgxMaskDirective],
+  imports: [ReactiveFormsModule, NzFormModule, NzSelectModule, NzButtonModule, NzInputModule, NzSpaceModule, NzTooltipModule, NzIconModule, NgxMaskDirective, NgxSpinnerModule],
   templateUrl: './form-user.component.html',
   styleUrl: './form-user.component.css'
 })
@@ -28,7 +30,6 @@ export class FormUserComponent implements OnInit, OnDestroy {
     private userService = inject(UserService);
     private toastr = inject(ToastrService);
     private destroy$ = new Subject<void>();
-    isSubmitting = false;
 
     groups: any[] = [
       {
@@ -45,7 +46,7 @@ export class FormUserComponent implements OnInit, OnDestroy {
       }
     ];
   
-    constructor(private modalRef: NzModalRef, @Inject(NZ_MODAL_DATA) public data: { userToEdit: User }) {}
+    constructor(private modalRef: NzModalRef, private spinnerService: NgxSpinnerService, @Inject(NZ_MODAL_DATA) public data: { userId: User }) {}
   
     userForm!: FormGroup;
   
@@ -54,20 +55,24 @@ export class FormUserComponent implements OnInit, OnDestroy {
         name: [null, Validators.required],
         email: [null, [Validators.required, Validators.email]],
         phoneNumber: [null, [Validators.required, Validators.minLength(11)]],
-        password: [null, this.data?.userToEdit ? null : [Validators.required, Validators.minLength(6)]],
-        confirmPassword: [null, this.data?.userToEdit ? null : [Validators.required]],
+        password: [null, this.data?.userId ? null : [Validators.required, Validators.minLength(6)]],
+        confirmPassword: [null, this.data?.userId ? null : [Validators.required]],
         role:['', Validators.required],
       }, {
         validators: ConfirmPasswordValidators.confirmPasswordValidator
       });
-      if (this.data?.userToEdit) {
-        this.userForm.patchValue({
-          name: this.data.userToEdit.name,
-          email: this.data.userToEdit.email,
-          phoneNumber: this.data.userToEdit.phoneNumber,
-          role: this.data.userToEdit.role,
-        });
+      if (this.data?.userId) {
+        this.getUser();
       }
+    }
+
+    getUser(){
+      // this.userForm.patchValue({
+      //     name: this.data.userToEdit.name,
+      //     email: this.data.userToEdit.email,
+      //     phoneNumber: this.data.userToEdit.phoneNumber,
+      //     role: this.data.userToEdit.role,
+      //   });
     }
 
     ngOnDestroy(): void {
@@ -77,15 +82,15 @@ export class FormUserComponent implements OnInit, OnDestroy {
   
     submitForm(): void {
       if (this.userForm.invalid) {
-        this.markFormGroupTouched(this.userForm);
+        FormUtils.markFormGroupTouched(this.userForm);
         return;
       }
   
-      this.isSubmitting = true;
+      this.spinnerService.show();
 
       const payload = this.userForm.value as CreateUser;
   
-      if(this.data && this.data.userToEdit){
+      if(this.data && this.data.userId){
         this.updateUser(payload);
       }else{
         this.createUser(payload);
@@ -100,16 +105,16 @@ export class FormUserComponent implements OnInit, OnDestroy {
           this.modalRef.close(true);
         },
         error: (err) => {
-          this.isSubmitting = false;
+          this.spinnerService.hide();
         },
         complete: () => {
-          this.isSubmitting = false;
+          this.spinnerService.hide();
         }
       });
     }
   
     updateUser(payload: CreateUser){
-      payload.id = this.data.userToEdit.id;
+      payload.id = this.data.userId.id;
       this.userService.updateUser(payload).subscribe({
         next: () => {
           this.toastr.success('Usuário atualizado!', 'Sucesso');
@@ -117,27 +122,20 @@ export class FormUserComponent implements OnInit, OnDestroy {
           this.modalRef.close(true);
         },
         error: (err) => {
-          this.isSubmitting = false;
+          this.spinnerService.hide();
         },
         complete: () => {
-          this.isSubmitting = false;
+          this.spinnerService.hide();
         }
       });
     }
 
     get isEditing(): boolean {
-      return !!this.data?.userToEdit;
+      return !!this.data?.userId;
     }
     
     get passwordLabel(): string {
       return this.isEditing ? 'New Password' : 'Password';
-    }
-  
-    private markFormGroupTouched(formGroup: FormGroup): void {
-      Object.values(formGroup.controls).forEach(control => {
-        control.markAllAsTouched();
-        control.updateValueAndValidity({ onlySelf: true });
-      });
     }
     
     private resetForm(){

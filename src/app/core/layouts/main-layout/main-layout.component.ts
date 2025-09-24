@@ -33,7 +33,13 @@ export class MainLayoutComponent {
       title: 'Usuários',
       icon: 'user',
       permission: 'VIEW_USER',
-      route: 'user/list'
+      route: 'users/list'
+    },
+    {
+      title: 'Clientes',
+      icon: 'usergroup-add',
+      permission: 'VIEW_CLIENTE',
+      route: 'clients/list'
     }
   ]
 

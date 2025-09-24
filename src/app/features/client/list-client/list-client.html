@@ -1,0 +1,75 @@
+<div class="container">
+  <div style="display: flex;">
+    <h2 nz-title class="text-center me-2">Clientes</h2>
+    <btn-novo title="Novo cliente" (clickEvent)="openNewClientModal()">
+    </btn-novo>
+  </div>
+
+  <form nz-form [formGroup]="filtroForm" (ngSubmit)="getClients()" nzLayout="vertical">
+    <div nz-row [nzGutter]="12">
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label for="nameFilter">Nome</nz-form-label>
+          <nz-form-control>
+            <input formControlName="nameFilter" id="nameFilter" placeholder="Nome" nz-input />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label for="document">CPF/CNPJ</nz-form-label>
+          <nz-form-control>
+            <input [mask]="mask" (ngModelChange)="onInputChange()" formControlName="document" id="document" placeholder="CPF/CNPJ" nz-input />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+    <div nz-row class="mt-2 mb-2">
+      <div nz-col [nzXs]="24" [nzMd]="12">
+        <btn-pesquisar class="me-1"></btn-pesquisar>
+        <btn-limpar (clickEvent)="limpar()"></btn-limpar>
+      </div>
+    </div>
+  </form>
+
+  <div class="d-flex justify-content-between align-items-center p-2 mb-2">
+    <nz-pagination nzSize="small" [nzTotal]="paginatedClients.count" [(nzPageIndex)]="paginatedClients.pageIndex"
+      [nzPageSize]="paginatedClients.pageSize" (nzPageIndexChange)="onPageChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)" [nzShowSizeChanger]="true" [nzPageSizeOptions]="[2,5,10]"
+      style="max-width: 600px; width: 100%;">
+    </nz-pagination>
+  </div>
+
+  <nz-table [nzData]="paginatedClients.data" [nzFrontPagination]="false" [nzSize]="'small'" [nzBordered]="true">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Telefone</th>
+        <th>CPF/CNPJ</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for(client of paginatedClients.data; track client.id){
+      <tr>
+        <td>{{ client.name }}</td>
+        <td>{{ client.email }}</td>
+        <td>{{ client.phoneNumber | phone }}</td>
+        <td>{{ client.document | cpfCnpj }}</td>
+        <td>
+          <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1" nz-button
+            nzType="primary" (click)="openEditClientModal(client)">
+            <span nz-icon nzType="edit"></span>
+          </button>
+          <button hasRole="DELETE_USER" nz-tooltip nzTooltipTitle="Excluir" nzTooltipPlacement="top" nz-button
+            nzType="primary" (click)="showConfirm(client.id)" nzDanger>
+            <span nz-icon nzType="delete"></span>
+          </button>
+        </td>
+      </tr>
+      }@empty {}
+    </tbody>
+  </nz-table>
+
+</div>
