@@ -64,7 +64,7 @@
         <td>{{ user.role }}</td>
         <td>
           <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1" nz-button
-            nzType="primary" (click)="openEditUserModal(user)">
+            nzType="primary" (click)="openEditUserModal(user.id)">
             <span nz-icon nzType="edit"></span>
           </button>
           <button hasRole="DELETE_USER" nz-tooltip nzTooltipTitle="Excluir" nzTooltipPlacement="top" nz-button

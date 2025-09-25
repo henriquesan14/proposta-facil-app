@@ -40,6 +40,10 @@ export class ListClient implements OnInit, OnDestroy {
         nameFilter: [null],
         document: ['']
       });
+
+      this.filtroForm.get('document')?.valueChanges.subscribe(value => {
+        this.onInputChange(value);
+      });
     }
     filtroForm!: FormGroup;
     mask: string = '';
@@ -83,9 +87,8 @@ export class ListClient implements OnInit, OnDestroy {
         })
     }
 
-    onInputChange(): void {
-      const cleanValue = this.filtroForm.get('document')?.value;
-      if (cleanValue && cleanValue.length <= 11) {
+    onInputChange(value: string): void {
+      if (value && value.length <= 11) {
         this.mask = '000.000.000-009'; // CPF
       } else {
         this.mask = '00.000.000/0000-00'; // CNPJ

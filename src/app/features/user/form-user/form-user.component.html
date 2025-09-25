@@ -91,7 +91,7 @@
                         <nz-select formControlName="role" class="groupSelect" [nzId]="'role'" style="min-width: 200px">
                             <nz-option nzLabel="Selecione..." [nzValue]="''" nzDisabled></nz-option>
                             @for(group of groups; track group){
-                            <nz-option [nzLabel]="group.name" [nzValue]="group.value"></nz-option>
+                            <nz-option [nzLabel]="group.name" [nzValue]="group.name"></nz-option>
                             }
                         </nz-select>
                     </nz-space>

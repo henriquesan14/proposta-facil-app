@@ -97,13 +97,13 @@ export class ListUsersComponent implements OnInit, OnDestroy {
       });
     }
   
-    openEditUserModal(user: User): void {
+    openEditUserModal(userId: string): void {
       const modal = this.modal.create({
         nzTitle: 'Editar usuário',
         nzContent: FormUserComponent,
         nzWidth: '800px',
         nzData:{
-          userToEdit: user
+          userId
         },
         nzFooter: null
       });

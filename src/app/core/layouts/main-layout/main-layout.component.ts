@@ -40,6 +40,12 @@ export class MainLayoutComponent {
       icon: 'usergroup-add',
       permission: 'VIEW_CLIENTE',
       route: 'clients/list'
+    },
+    {
+      title: 'Propostas',
+      icon: 'file-done',
+      permission: 'VIEW_PROPOSTA',
+      route: 'proposals/list'
     }
   ]
 

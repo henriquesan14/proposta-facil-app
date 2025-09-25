@@ -24,6 +24,10 @@ export class UserService {
     return this.http.get<PaginatedResult<User>>(`${this.API}/`, {params});
   }
 
+  getUserById(id: string): Observable<User>{
+    return this.http.get<User>(`${this.API}/${id}`);
+  }
+
   createUser(user: CreateUser): Observable<User>{
     return this.http.post<User>(`${this.API}/`, user);
   }

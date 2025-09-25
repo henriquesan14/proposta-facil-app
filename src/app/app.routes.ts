@@ -21,6 +21,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'users', pathMatch: 'full' },
       { path: 'users', loadChildren: () => import('./features/user/user.routes').then(m => m.USER_ROUTES) },
       { path: 'clients', loadChildren: () => import('./features/client/client.routes').then(m => m.CLIENT_ROUTES) },
+      { path: 'proposals', loadChildren: () => import('./features/proposal/proposal.routes').then(m => m.PROPOSAL_ROUTES) },
     ],
     canActivate: [AuthGuard],
   },

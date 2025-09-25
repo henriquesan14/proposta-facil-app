@@ -1,0 +1,100 @@
+<div class="container">
+  <div style="display: flex;">
+    <h2 nz-title class="text-center me-2">Propostas</h2>
+    <btn-novo title="Nova proposta" (clickEvent)="openNewProposalModal()">
+    </btn-novo>
+  </div>
+
+  <form nz-form [formGroup]="filtroForm" (ngSubmit)="getProposals()" nzLayout="vertical">
+    <div nz-row [nzGutter]="12">
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label for="titleFilter">Titulo</nz-form-label>
+          <nz-form-control>
+            <input formControlName="titleFilter" id="titleFilter" placeholder="Titulo" nz-input />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label for="documentFilter">CPF/CNPJ</nz-form-label>
+          <nz-form-control>
+            <input [mask]="mask" formControlName="documentFilter" id="documentFilter" placeholder="CPF/CNPJ" nz-input />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label for="numberFilter">Número</nz-form-label>
+          <nz-form-control>
+            <input mask="00000000-AAAA-AAAA" [dropSpecialCharacters]="false"  formControlName="numberFilter" id="numberFilter" placeholder="00000000-AAAA-AAAA" style="text-transform: uppercase" nz-input />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label for="statusFilter">Status</nz-form-label>
+          <nz-form-control>
+            <nz-select id="statusFilter" formControlName="statusFilter">
+              <nz-option [nzValue]="''" nzLabel="Todos"></nz-option>
+              @for(status of status; track $index){
+              <nz-option [nzValue]="status" [nzLabel]="status"></nz-option>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+    <div nz-row class="mt-2 mb-2">
+      <div nz-col [nzXs]="24" [nzMd]="12">
+        <btn-pesquisar class="me-1"></btn-pesquisar>
+        <btn-limpar (clickEvent)="limpar()"></btn-limpar>
+      </div>
+    </div>
+  </form>
+
+  <div class="d-flex justify-content-between align-items-center p-2 mb-2">
+    <nz-pagination nzSize="small" [nzTotal]="paginatedProposals.count" [(nzPageIndex)]="paginatedProposals.pageIndex"
+      [nzPageSize]="paginatedProposals.pageSize" (nzPageIndexChange)="onPageChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)" [nzShowSizeChanger]="true" [nzPageSizeOptions]="[2,5,10]"
+      style="max-width: 600px; width: 100%;">
+    </nz-pagination>
+  </div>
+
+  <nz-table [nzData]="paginatedProposals.data" [nzFrontPagination]="false" [nzSize]="'small'" [nzBordered]="true">
+    <thead>
+      <tr>
+        <th>Titulo</th>
+        <th>Cliente</th>
+        <th>Número</th>
+        <th>Status</th>
+        <th>Total</th>
+        <th>Data de expiração</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for(proposal of paginatedProposals.data; track proposal.id){
+      <tr>
+        <td>{{ proposal.title }}</td>
+        <td>{{ proposal.client.name }}</td>
+        <td>{{ proposal.number }}</td>
+        <td>{{ proposal.proposalStatus }}</td>
+        <td>{{ proposal.totalAmount }}</td>
+        <td>{{ proposal.validUntil | date: 'dd/MM/yyyy' }}</td>
+        <td>
+          <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1" nz-button
+            nzType="primary" (click)="openEditProposalModal(proposal.id)">
+            <span nz-icon nzType="edit"></span>
+          </button>
+          <button hasRole="DELETE_USER" nz-tooltip nzTooltipTitle="Excluir" nzTooltipPlacement="top" nz-button
+            nzType="primary" (click)="showConfirm(proposal.id)" nzDanger>
+            <span nz-icon nzType="delete"></span>
+          </button>
+        </td>
+      </tr>
+      }@empty {}
+    </tbody>
+  </nz-table>
+
+</div>

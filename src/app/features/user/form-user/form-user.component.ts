@@ -1,6 +1,6 @@
 import { Component, Inject, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { UserService } from '../../../shared/services/user.service';
 import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal';
 import { ToastrService } from 'ngx-toastr';
@@ -46,7 +46,7 @@ export class FormUserComponent implements OnInit, OnDestroy {
       }
     ];
   
-    constructor(private modalRef: NzModalRef, private spinnerService: NgxSpinnerService, @Inject(NZ_MODAL_DATA) public data: { userId: User }) {}
+    constructor(private modalRef: NzModalRef, private spinnerService: NgxSpinnerService, @Inject(NZ_MODAL_DATA) public data: { userId: string }) {}
   
     userForm!: FormGroup;
   
@@ -67,12 +67,26 @@ export class FormUserComponent implements OnInit, OnDestroy {
     }
 
     getUser(){
-      // this.userForm.patchValue({
-      //     name: this.data.userToEdit.name,
-      //     email: this.data.userToEdit.email,
-      //     phoneNumber: this.data.userToEdit.phoneNumber,
-      //     role: this.data.userToEdit.role,
-      //   });
+      this.spinnerService.show();
+      this.userService.getUserById(this.data.userId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.userForm.patchValue({
+            name: res.name,
+            email: res.email,
+            phoneNumber: res.phoneNumber,
+            role: res.role,
+          });
+        },
+        error: () => {
+          this.spinnerService.hide();
+        },
+        complete: () => {
+          this.spinnerService.hide();
+        }
+      })
+      
     }
 
     ngOnDestroy(): void {
@@ -114,7 +128,7 @@ export class FormUserComponent implements OnInit, OnDestroy {
     }
   
     updateUser(payload: CreateUser){
-      payload.id = this.data.userId.id;
+      payload.id = this.data.userId;
       this.userService.updateUser(payload).subscribe({
         next: () => {
           this.toastr.success('Usuário atualizado!', 'Sucesso');
