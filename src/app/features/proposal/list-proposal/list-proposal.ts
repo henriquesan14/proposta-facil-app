@@ -19,6 +19,7 @@ import { BtnNovoComponent } from '../../../shared/components/btn-novo/btn-novo.c
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { DatePipe } from '@angular/common';
 import { NgxMaskDirective } from 'ngx-mask';
+import { FormProposal } from '../form-proposal/form-proposal';
 
 @Component({
   selector: 'app-list-proposal',
@@ -82,36 +83,36 @@ export class ListProposal implements OnInit, OnDestroy {
     }
 
     openNewProposalModal(): void {
-      // const modal = this.modal.create({
-      //   nzTitle: 'Cadastrar usuário',
-      //   nzContent: FormUserComponent,
-      //   nzWidth: '800px',
-      //   nzFooter: null,
-      // });
+      const modal = this.modal.create({
+        nzTitle: 'Cadastrar proposta',
+        nzContent: FormProposal,
+        nzWidth: '800px',
+        nzFooter: null,
+      });
   
-      // modal.afterClose.subscribe((result) => {
-      //   if (result) {
-      //     this.getUsers();
-      //   }
-      // });
+      modal.afterClose.subscribe((result) => {
+        if (result) {
+          this.getProposals();
+        }
+      });
     }
   
-    openEditProposalModal(userId: string): void {
-      // const modal = this.modal.create({
-      //   nzTitle: 'Editar usuário',
-      //   nzContent: FormUserComponent,
-      //   nzWidth: '800px',
-      //   nzData:{
-      //     userId
-      //   },
-      //   nzFooter: null
-      // });
+    openEditProposalModal(proposalId: string): void {
+      const modal = this.modal.create({
+        nzTitle: 'Editar usuário',
+        nzContent: FormProposal,
+        nzWidth: '800px',
+        nzData:{
+          proposalId
+        },
+        nzFooter: null
+      });
       
-      // modal.afterClose.subscribe((result) => {
-      //   if (result) {
-      //     this.getUsers();
-      //   }
-      // });
+      modal.afterClose.subscribe((result) => {
+        if (result) {
+          this.getProposals();
+        }
+      });
     }
 
     onPageChange(event: number){

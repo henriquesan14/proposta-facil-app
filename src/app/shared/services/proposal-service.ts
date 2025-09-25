@@ -4,6 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { PaginatedResult } from '../../core/models/paginated-result.interface';
 import { Proposal } from '../../core/models/proposal.interface';
 import { Observable } from 'rxjs';
+import { CreateProposal } from '../../core/models/create-proposal.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -26,11 +27,11 @@ export class ProposalService {
     return this.http.get<Proposal>(`${this.API}/${id}`);
   }
 
-  createProposal(proposal: Proposal): Observable<Proposal>{
+  createProposal(proposal: CreateProposal): Observable<Proposal>{
     return this.http.post<Proposal>(`${this.API}/`, proposal);
   }
 
-  updateProposal(proposal: Proposal){
+  updateProposal(proposal: CreateProposal){
     return this.http.put(`${this.API}/`, proposal);
   }
 

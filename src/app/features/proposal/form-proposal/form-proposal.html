@@ -1,0 +1,81 @@
+<form nz-form [formGroup]="formClient" (ngSubmit)="onSubmit()" nzLayout="vertical">
+  <nz-row [nzGutter]="16">
+    <nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label [nzRequired]="true" nzFor="title">Titulo</nz-form-label>
+        <nz-form-control [nzErrorTip]="titleErrorTpl">
+          <input nz-input formControlName="title" id="title" maxlength="100" />
+          <ng-template #titleErrorTpl let-control>
+            @if (control.hasError('required')) {
+            O campo é obrigatório
+            }
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </nz-col>
+
+    <nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" nzRequired="">Cliente</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <select-autocomplete [valorInicial]="formClient.get('clientName')?.value" [shouldReset]="false"
+            [title]="'Selecione o cliente'" [filterBy]="'name'" (selectedEvent)="clientSelected($event)"
+            (changeEvent)="onChangeClient($event)" (deselectEvent)="clientDeselected()"
+            [items]="clients"></select-autocomplete>
+          @if(clientNameControl.invalid && clientNameControl.touched){
+          <div>
+            @if(clientNameControl.hasError('required')){
+            <span class="text-danger">
+              O campo é obrigatório.
+            </span>
+            }
+          </div>
+          }
+        </nz-form-control>
+      </nz-form-item>
+    </nz-col>
+
+    <nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label nzFor="currency" [nzRequired]="true">Moeda</nz-form-label>
+        <nz-form-control [nzErrorTip]="currencyErrorTpl">
+          <input mask="SSS" style="text-transform: uppercase;" nz-input formControlName="currency" id="currency"
+            maxlength="100" />
+          <ng-template #currencyErrorTpl let-control>
+            @if (control.hasError('required')) {
+            O campo é obrigatório
+            }
+            @if (control.hasError('mask')) {
+            Moeda inválida
+            }
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </nz-col>
+
+    <nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-control [nzErrorTip]="validUntilErrorTpl">
+          <nz-form-label [nzRequired]="true">Data de Expiração</nz-form-label>
+          <nz-date-picker formControlName="validUntil" [nzFormat]="'dd/MM/yyyy'"></nz-date-picker>
+          <ng-template #validUntilErrorTpl let-control>
+            @if (control.hasError('required')) {
+            O campo é obrigatório
+            }
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </nz-col>
+  </nz-row>
+
+  <!-- Botões -->
+  <nz-form-item class="mt-4">
+    <nz-form-control>
+      <button nz-button nzType="primary">
+        {{ data && data.proposalId ? 'Editar' : 'Cadastrar' }}
+      </button>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+
+<ngx-spinner type="ball-clip-rotate-multiple"></ngx-spinner>

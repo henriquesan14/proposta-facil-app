@@ -1,5 +1,3 @@
-import { Address } from "./endereco.interface";
-
 export interface Client {
     id: string;
     name: string;
