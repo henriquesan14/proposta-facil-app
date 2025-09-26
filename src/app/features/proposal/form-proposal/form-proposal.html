@@ -4,7 +4,7 @@
       <nz-form-item>
         <nz-form-label [nzRequired]="true" nzFor="title">Titulo</nz-form-label>
         <nz-form-control [nzErrorTip]="titleErrorTpl">
-          <input nz-input formControlName="title" id="title" maxlength="100" />
+          <input nz-input formControlName="title" id="title" placeholder="Titulo" maxlength="100" />
           <ng-template #titleErrorTpl let-control>
             @if (control.hasError('required')) {
             O campo é obrigatório
@@ -21,7 +21,7 @@
           <select-autocomplete [valorInicial]="formClient.get('clientName')?.value" [shouldReset]="false"
             [title]="'Selecione o cliente'" [filterBy]="'name'" (selectedEvent)="clientSelected($event)"
             (changeEvent)="onChangeClient($event)" (deselectEvent)="clientDeselected()"
-            [items]="clients"></select-autocomplete>
+            [items]="clients" [invalid]="clientNameControl.invalid && clientNameControl.touched"></select-autocomplete>
           @if(clientNameControl.invalid && clientNameControl.touched){
           <div>
             @if(clientNameControl.hasError('required')){
@@ -65,6 +65,50 @@
           </ng-template>
         </nz-form-control>
       </nz-form-item>
+    </nz-col>
+
+    <nz-col>
+      <nz-card class="mt-4" nzTitle="Itens da Proposta" class="mb-2">
+        <div formArrayName="items">
+          @for(item of items.controls; let i = $index; track item){
+            <div [formGroupName]="i" class="mb-3">
+              <nz-row [nzGutter]="16">
+                <nz-col [nzSpan]="6">
+                  <nz-form-control>
+                    <input nz-input placeholder="Nome" formControlName="name" />
+                  </nz-form-control>
+                </nz-col>
+                <nz-col [nzSpan]="8">
+                  <nz-form-control>
+                    <input nz-input placeholder="Descrição" formControlName="description" />
+                  </nz-form-control>
+                </nz-col>
+                <nz-col [nzSpan]="4">
+                  <nz-form-control>
+                    <input nz-input [mask]="'0?0?0'" [validation]="false" [dropSpecialCharacters]="false" placeholder="Qtd." formControlName="quantity" />
+                  </nz-form-control>
+                </nz-col>
+                <nz-col [nzSpan]="4">
+                  <nz-form-control>
+                    <input mask="separator.2" [dropSpecialCharacters]="true" nz-input placeholder="Preço unitário" formControlName="unitPrice" maxlength="8"/>
+                  </nz-form-control>
+                </nz-col>
+                @if (items.controls.length > 1) {
+                  <nz-col [nzSpan]="2" class="flex items-center">
+                    <button type="button" nz-button nzType="default" nzDanger (click)="removeItem(i)" nz-tooltip nzTooltipPlacement="right" [nzTooltipTitle]="'Excluir'">
+                      <nz-icon nzType="delete" />
+                    </button>
+                  </nz-col>
+                }
+              </nz-row>
+            </div>
+          }
+        </div>
+
+        <button type="button" nz-button nzType="dashed" class="mt-2" (click)="addItem()">
+          + Adicionar Item
+        </button>
+      </nz-card>
     </nz-col>
   </nz-row>
 

@@ -18,6 +18,7 @@ export class SelectAutocompleteComponent {
   @Input({required: true}) shouldReset!: boolean;
   @Input() valorInicial!: string;
   @Input() checkBy!: string;
+  @Input() invalid: boolean = false;
 
   @ViewChild('input') input!: ElementRef<HTMLInputElement>;
   @ViewChild('optionsList') optionsList!: ElementRef<HTMLDivElement>;

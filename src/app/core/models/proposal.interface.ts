@@ -8,7 +8,8 @@ export interface Proposal {
   number: string
   title: string
   proposalStatus: string
-  totalAmount: string
+  currency: string
+  totalAmount: number
   validUntil: string
   items: ProposalItem[]
 }

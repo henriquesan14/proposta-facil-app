@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subject, takeUntil } from 'rxjs';
@@ -18,11 +18,15 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { SelectAutocompleteComponent } from '../../../shared/components/select-autocomplete/select-autocomplete.component';
 import { Client } from '../../../core/models/client.interface';
 import { ClientService } from '../../../shared/services/client.service';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 
 @Component({
+  standalone: true,
   selector: 'app-form-proposal',
   imports: [ReactiveFormsModule, NgxMaskDirective, NzButtonModule, NgxSpinnerModule, NzFormModule, NzInputModule, NzRadioModule, NzSelectModule, NzDatePickerModule, NzCheckboxModule, NzDatePickerModule,
-    SelectAutocompleteComponent
+    SelectAutocompleteComponent, NzCardModule, NzIconModule, NzTooltipModule
   ],
   templateUrl: './form-proposal.html',
   styleUrl: './form-proposal.css'
@@ -43,16 +47,70 @@ export class FormProposal implements OnInit, OnDestroy {
         clientName: ['', [Validators.required]],
         title: [null, [Validators.required, Validators.maxLength(100)]],
         currency: ['BRL', [Validators.required]],
-        validUntil: [null, Validators.required]
+        validUntil: [null, Validators.required],
+        items: this.formBuilder.array([this.createItem()])
       });
       this.getClients({pageSize: 20});
+      if (this.data?.proposalId) {
+        this.getClient();
+      }
     }
-  
+
+    getClient() {
+      this.proposalService.getProposalById(this.data.proposalId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.formClient.patchValue({
+            clientId: res.client.id,
+            clientName: res.client.name,
+            title: res.title,
+            currency: res.currency,
+            validUntil: new Date(res.validUntil)
+          });
+
+          const itemsFormArray = this.items;
+          itemsFormArray.clear(); 
+
+          if (res.items && res.items.length) {
+            res.items.forEach((item: any) => {
+              const itemGroup = this.createItem();
+              itemGroup.patchValue({
+                name: item.name,
+                description: item.description,
+                quantity: item.quantity,
+                unitPrice: item.unitPrice
+              });
+              itemsFormArray.push(itemGroup);
+            });
+          } else {
+            itemsFormArray.push(this.createItem());
+          }
+        }
+      })
+    }
+
     ngOnDestroy(): void {
       this.destroy$.next();
       this.destroy$.complete();
     }
 
+    createItem(): FormGroup {
+      return this.formBuilder.group({
+        name: ['', Validators.required],
+        description: ['', Validators.required],
+        quantity: [null, [Validators.required, Validators.pattern(/^\d{1,3}$/)]], // 1 a 3 dígitos
+        unitPrice: [null, Validators.required]
+      });
+    }
+
+    addItem() {
+      this.items.push(this.createItem());
+    }
+
+    removeItem(index: number) {
+      this.items.removeAt(index);
+    }
 
     getClients(params: any) {
       this.clientService.getClients(params)
@@ -83,19 +141,15 @@ export class FormProposal implements OnInit, OnDestroy {
         });
       }
   
-    getClient() {
-      
-    }
-  
     onSubmit(){
       if(this.formClient.valid){
         const form = this.formClient.value;
         const proposal = <CreateProposal>{
-          clientId: '',
+          clientId: form.clientId,
           title: form.title,
           currency: form.currency,
-          validUntil: form.document,
-          items: [],
+          validUntil: form.validUntil.toISOString().split('T')[0],
+          items: form.items,
         };
         
       
@@ -144,6 +198,10 @@ export class FormProposal implements OnInit, OnDestroy {
   
     getMaskCpfCnpj(){
       return this.formClient.get('tipoPessoa')?.value == 'PESSOA_FISICA' ? '000.000.000-00' : '00.000.000/0000-00';
+    }
+
+    get items(): FormArray {
+      return this.formClient.get('items') as FormArray;
     }
 
     get clientNameControl(): FormControl {

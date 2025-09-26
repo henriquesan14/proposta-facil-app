@@ -17,14 +17,15 @@ import { BtnLimparComponent } from '../../../shared/components/btn-limpar/btn-li
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { BtnNovoComponent } from '../../../shared/components/btn-novo/btn-novo.component';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { DatePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import { NgxMaskDirective } from 'ngx-mask';
 import { FormProposal } from '../form-proposal/form-proposal';
 
 @Component({
+  standalone: true,
   selector: 'app-list-proposal',
   imports: [NzTableModule, NzButtonModule, NzIconModule, NzModalModule, NzTooltipModule, ReactiveFormsModule, NzFormModule, NzPaginationModule, BtnPesquisarComponent, BtnLimparComponent, NzInputModule, BtnNovoComponent,
-    DatePipe, NzSelectModule, NgxMaskDirective],
+    DatePipe, NzSelectModule, NgxMaskDirective, CurrencyPipe],
   templateUrl: './list-proposal.html',
   styleUrl: './list-proposal.css'
 })
@@ -99,7 +100,7 @@ export class ListProposal implements OnInit, OnDestroy {
   
     openEditProposalModal(proposalId: string): void {
       const modal = this.modal.create({
-        nzTitle: 'Editar usuário',
+        nzTitle: 'Editar proposta',
         nzContent: FormProposal,
         nzWidth: '800px',
         nzData:{

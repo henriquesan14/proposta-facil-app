@@ -27,7 +27,7 @@
         <nz-form-item>
           <nz-form-label for="numberFilter">Número</nz-form-label>
           <nz-form-control>
-            <input mask="00000000-AAAA-AAAA" [dropSpecialCharacters]="false"  formControlName="numberFilter" id="numberFilter" placeholder="00000000-AAAA-AAAA" style="text-transform: uppercase" nz-input />
+            <input mask="000000-000000-AAAA-AAAA" [dropSpecialCharacters]="false"  formControlName="numberFilter" id="numberFilter" placeholder="000000-000000-AAAA-AAAA" style="text-transform: uppercase" nz-input />
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -80,7 +80,7 @@
         <td>{{ proposal.client.name }}</td>
         <td>{{ proposal.number }}</td>
         <td>{{ proposal.proposalStatus }}</td>
-        <td>{{ proposal.totalAmount }}</td>
+        <td>{{ proposal.totalAmount | currency: proposal.currency }}</td>
         <td>{{ proposal.validUntil | date: 'dd/MM/yyyy' }}</td>
         <td>
           <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1" nz-button
