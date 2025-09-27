@@ -140,6 +140,15 @@ export class ListProposal implements OnInit, OnDestroy {
       });
     }
 
+    sendProposal(id: string){
+      this.proposalService.sendProposal(id).subscribe({
+        next: () => {
+          this.getProposals();
+          this.toastr.success('Proposta enviada', 'Sucesso!');
+        }
+      })
+    }
+
     limpar(){
       this.filtroForm.reset();
       this.filtroForm.get('statusFilter')?.setValue('');

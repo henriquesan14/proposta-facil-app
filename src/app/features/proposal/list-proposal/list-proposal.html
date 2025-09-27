@@ -83,11 +83,15 @@
         <td>{{ proposal.totalAmount | currency: proposal.currency }}</td>
         <td>{{ proposal.validUntil | date: 'dd/MM/yyyy' }}</td>
         <td>
-          <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1" nz-button
+          <button nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1" nz-button
             nzType="primary" (click)="openEditProposalModal(proposal.id)">
             <span nz-icon nzType="edit"></span>
           </button>
-          <button hasRole="DELETE_USER" nz-tooltip nzTooltipTitle="Excluir" nzTooltipPlacement="top" nz-button
+          <button [disabled]="proposal.proposalStatus != 'Draft'"  nz-tooltip nzTooltipTitle="Enviar" nzTooltipPlacement="top" class="me-1" nz-button
+            nzType="primary" (click)="sendProposal(proposal.id)">
+            <span nz-icon nzType="send"></span>
+          </button>
+          <button nz-tooltip nzTooltipTitle="Excluir" nzTooltipPlacement="top" nz-button
             nzType="primary" (click)="showConfirm(proposal.id)" nzDanger>
             <span nz-icon nzType="delete"></span>
           </button>

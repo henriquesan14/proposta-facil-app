@@ -38,4 +38,8 @@ export class ProposalService {
   deleteProposal(id: string){
     return this.http.delete(`${this.API}/${id}`,);
   }
+
+  sendProposal(id: string){
+    return this.http.post(`${this.API}/${id}/send`, {});
+  }
 }
