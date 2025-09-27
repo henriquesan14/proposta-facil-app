@@ -21,19 +21,20 @@ import { ClientService } from '../../../shared/services/client.service';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   standalone: true,
   selector: 'app-form-proposal',
   imports: [ReactiveFormsModule, NgxMaskDirective, NzButtonModule, NgxSpinnerModule, NzFormModule, NzInputModule, NzRadioModule, NzSelectModule, NzDatePickerModule, NzCheckboxModule, NzDatePickerModule,
-    SelectAutocompleteComponent, NzCardModule, NzIconModule, NzTooltipModule
+    SelectAutocompleteComponent, NzCardModule, NzIconModule, NzTooltipModule, CurrencyPipe
   ],
   templateUrl: './form-proposal.html',
   styleUrl: './form-proposal.css'
 })
 export class FormProposal implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-    formClient!: FormGroup;
+    formProposal!: FormGroup;
     clients: Client[] = [];
 
     constructor(private formBuilder: FormBuilder,
@@ -42,7 +43,7 @@ export class FormProposal implements OnInit, OnDestroy {
     }
   
     ngOnInit(): void {
-      this.formClient = this.formBuilder.group({
+      this.formProposal = this.formBuilder.group({
         clientId: [null, [Validators.required]],
         clientName: ['', [Validators.required]],
         title: [null, [Validators.required, Validators.maxLength(100)]],
@@ -54,6 +55,7 @@ export class FormProposal implements OnInit, OnDestroy {
       if (this.data?.proposalId) {
         this.getClient();
       }
+      
     }
 
     getClient() {
@@ -61,7 +63,7 @@ export class FormProposal implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
-          this.formClient.patchValue({
+          this.formProposal.patchValue({
             clientId: res.client.id,
             clientName: res.client.name,
             title: res.title,
@@ -76,6 +78,7 @@ export class FormProposal implements OnInit, OnDestroy {
             res.items.forEach((item: any) => {
               const itemGroup = this.createItem();
               itemGroup.patchValue({
+                id: item.id,
                 name: item.name,
                 description: item.description,
                 quantity: item.quantity,
@@ -97,6 +100,7 @@ export class FormProposal implements OnInit, OnDestroy {
 
     createItem(): FormGroup {
       return this.formBuilder.group({
+        id: [null],
         name: ['', Validators.required],
         description: ['', Validators.required],
         quantity: [null, [Validators.required, Validators.pattern(/^\d{1,3}$/)]], // 1 a 3 dígitos
@@ -128,22 +132,22 @@ export class FormProposal implements OnInit, OnDestroy {
     }
 
     clientSelected(client: Client) {
-      this.formClient.patchValue({
+      this.formProposal.patchValue({
         clientId: client.id,
         clientName: client.name
       });
     }
 
      clientDeselected() {
-        this.formClient.patchValue({
+        this.formProposal.patchValue({
           clientId: null,
           clientName: null
         });
       }
   
     onSubmit(){
-      if(this.formClient.valid){
-        const form = this.formClient.value;
+      if(this.formProposal.valid){
+        const form = this.formProposal.value;
         const proposal = <CreateProposal>{
           clientId: form.clientId,
           title: form.title,
@@ -159,7 +163,7 @@ export class FormProposal implements OnInit, OnDestroy {
           this.cadastrarProposal(proposal);
         }
       }else{
-        FormUtils.markFormGroupTouched(this.formClient);
+        FormUtils.markFormGroupTouched(this.formProposal);
       }
     }
   
@@ -197,14 +201,22 @@ export class FormProposal implements OnInit, OnDestroy {
     }
   
     getMaskCpfCnpj(){
-      return this.formClient.get('tipoPessoa')?.value == 'PESSOA_FISICA' ? '000.000.000-00' : '00.000.000/0000-00';
+      return this.formProposal.get('tipoPessoa')?.value == 'PESSOA_FISICA' ? '000.000.000-00' : '00.000.000/0000-00';
     }
 
     get items(): FormArray {
-      return this.formClient.get('items') as FormArray;
+      return this.formProposal.get('items') as FormArray;
     }
 
     get clientNameControl(): FormControl {
-      return this.formClient.get('clientName') as FormControl;
+      return this.formProposal.get('clientName') as FormControl;
+    }
+
+    get totalProposal(): number {
+      return this.items.controls.reduce((total, item) => {
+        const quantity = item.get('quantity')?.value || 0;
+        const unitPrice = item.get('unitPrice')?.value || 0;
+        return total + quantity * unitPrice;
+      }, 0);
     }
 }
