@@ -1,0 +1,94 @@
+@if(subscriptionAccount && subscriptionAccount.activeSubscription) {
+  <div class="p-4">
+    <!-- Card do Plano Ativo -->
+    <nz-card nzTitle="Plano Ativo" class="mb-4" [nzBordered]="false">
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <p><strong>Plano:</strong> {{ subscriptionAccount.activeSubscription.subscriptionPlan.name }}</p>
+          <p><strong>Descrição:</strong> {{ subscriptionAccount.activeSubscription.subscriptionPlan.description }}</p>
+          <p><strong>Status: </strong>
+            <nz-tag [nzColor]="subscriptionAccount.activeSubscription.status === 'Active' ? 'green' : 'red'">
+              {{ subscriptionAccount.activeSubscription.status }}
+            </nz-tag>
+          </p>
+        </div>
+        <div>
+          <p><strong>Valor:</strong> {{ subscriptionAccount.activeSubscription.subscriptionPlan.price | currency:'BRL' }}</p>
+          <p><strong>Início:</strong> {{ subscriptionAccount.activeSubscription.startDate | date:'dd/MM/yyyy' }}</p>
+          <p><strong>Propostas usadas:</strong>
+            {{ subscriptionAccount.activeSubscription.proposalsUsed }} /
+            {{ subscriptionAccount.activeSubscription.subscriptionPlan.maxProposalsPerMonth }}
+          </p>
+        </div>
+      </div>
+      <div class="mt-4">
+        <a nz-button nzType="primary" nzShape="round"
+           [href]="subscriptionAccount.activeSubscription.paymentLink"
+           target="_blank">
+          Gerenciar Pagamento
+        </a>
+      </div>
+    </nz-card>
+
+    <!-- Pagamentos -->
+    <nz-card nzTitle="Pagamentos" [nzBordered]="false">
+      <nz-table #paymentTable [nzData]="subscriptionAccount.activeSubscription.payments" [nzBordered]="true" [nzSize]="'middle'">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Valor</th>
+            <th>Tipo</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for(payment of paymentTable.data; track payment.id) {
+            <tr>
+              <td>{{ payment.paidDate | date:'dd/MM/yyyy' }}</td>
+              <td>{{ payment.amount | currency:payment.currency }}</td>
+              <td>{{ payment.billingType }}</td>
+              <td>
+                @if(payment.paidDate) {
+                  <nz-tag nzColor="green">Pago</nz-tag>
+                } @else {
+                  <nz-tag nzColor="orange">Pendente</nz-tag>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </div>
+}
+
+@if(subscriptionAccount && !subscriptionAccount.activeSubscription) {
+  <nz-result nzStatus="info" nzTitle="Nenhuma assinatura ativa encontrada">
+    <div nz-result-extra>
+      <button nz-button nzType="primary" routerLink="/planos">Escolher um plano</button>
+    </div>
+  </nz-result>
+}
+
+@if(subscriptionAccount && subscriptionAccount.previousSubscriptions.length) {
+  <div class="p-4">
+    <nz-card nzTitle="Assinaturas Anteriores" [nzBordered]="false">
+      <nz-list [nzDataSource]="subscriptionAccount.previousSubscriptions" [nzRenderItem]="sub">
+        <ng-template #sub let-item>
+          <nz-list-item>
+            <div class="flex justify-between w-full">
+              <div class="mb-1">
+                <strong>{{ item.subscriptionPlan.name }}</strong> -
+                {{ item.subscriptionPlan.description }}
+              </div>
+              <div>
+                <span class="me-1">Data final {{item.endDate | date: 'dd/MM/yyyy'}}</span>
+                <nz-tag nzColor="red">{{ item.status }}</nz-tag>
+              </div>
+            </div>
+          </nz-list-item>
+        </ng-template>
+      </nz-list>
+    </nz-card>
+  </div>
+}

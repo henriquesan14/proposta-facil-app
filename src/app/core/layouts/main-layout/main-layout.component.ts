@@ -10,12 +10,13 @@ import { AuthService } from '../../../shared/services/auth.service';
 import { LocalstorageService } from '../../../shared/services/local-storage.service';
 import { Menu } from '../../models/menu.interface';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
+import { HasRoleDirective } from '../../../shared/directives/has-role.directive';
 
 @Component({
   selector: 'app-main-layout',
   standalone: true,
   imports: [CommonModule, RouterLink, RouterOutlet, NzIconModule, NzLayoutModule, NzMenuModule, RouterModule, NzDropdownMenuComponent, NzDropDownModule,
-    NzSpinModule, NzTooltipModule
+    NzSpinModule, NzTooltipModule, HasRoleDirective
   ],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.css'
@@ -30,21 +31,27 @@ export class MainLayoutComponent {
 
   menuItems: Menu[] = [
     {
+      title: 'Tenants',
+      icon: 'home',
+      role: 'AdminSystem',
+      route: 'tenant/list'
+    },
+    {
       title: 'Usuários',
       icon: 'user',
-      permission: 'VIEW_USER',
+      role: 'AdminTenant',
       route: 'users/list'
     },
     {
       title: 'Clientes',
       icon: 'usergroup-add',
-      permission: 'VIEW_CLIENTE',
+      role: 'AdminTenant',
       route: 'clients/list'
     },
     {
       title: 'Propostas',
       icon: 'file-done',
-      permission: 'VIEW_PROPOSTA',
+      role: 'AdminTenant',
       route: 'proposals/list'
     }
   ]
@@ -62,6 +69,11 @@ export class MainLayoutComponent {
         this.isLoggingOut = false;
       }
     })
+  }
+
+  subscriptionAccount(){
+    console.log('foi')
+    this.router.navigateByUrl('/account/subscription');
   }
 
   get nomeUsuario(){

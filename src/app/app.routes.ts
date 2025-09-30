@@ -22,6 +22,7 @@ export const routes: Routes = [
       { path: 'users', loadChildren: () => import('./features/user/user.routes').then(m => m.USER_ROUTES) },
       { path: 'clients', loadChildren: () => import('./features/client/client.routes').then(m => m.CLIENT_ROUTES) },
       { path: 'proposals', loadChildren: () => import('./features/proposal/proposal.routes').then(m => m.PROPOSAL_ROUTES) },
+      { path: 'account', loadChildren: () => import('./features/account/account.routes').then(m => m.ACCOUNT_ROUTES) },
     ],
     canActivate: [AuthGuard],
   },

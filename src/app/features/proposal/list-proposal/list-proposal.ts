@@ -30,7 +30,7 @@ import { FormProposal } from '../form-proposal/form-proposal';
   styleUrl: './list-proposal.css'
 })
 export class ListProposal implements OnInit, OnDestroy {
-  private destroy$ = new Subject<void>();
+    private destroy$ = new Subject<void>();
     confirmModal?: NzModalRef;
     private modal = inject(NzModalService);
     private toastr = inject(ToastrService);

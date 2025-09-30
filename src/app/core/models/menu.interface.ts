@@ -1,7 +1,7 @@
 export interface Menu {
     title: string,
     icon: string,
-    permission: string,
+    role: string,
     route: string,
     children?: ChildMenu[]
 }
@@ -9,5 +9,5 @@ export interface Menu {
 export interface ChildMenu {
     label: string;
     link: string;
-    permission: string;
+    role: string;
 }
