@@ -37,6 +37,12 @@ export class MainLayoutComponent {
       route: 'tenants/list'
     },
     {
+      title: 'Assinaturas',
+      icon: 'dollar',
+      role: 'AdminSystem',
+      route: 'subscriptions/list'
+    },
+    {
       title: 'Usuários',
       icon: 'user',
       role: 'AdminTenant',

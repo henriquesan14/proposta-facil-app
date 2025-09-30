@@ -11,7 +11,6 @@ import { NgxMaskDirective } from 'ngx-mask';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
@@ -26,7 +25,7 @@ import { CurrencyPipe } from '@angular/common';
 @Component({
   standalone: true,
   selector: 'app-form-proposal',
-  imports: [ReactiveFormsModule, NgxMaskDirective, NzButtonModule, NgxSpinnerModule, NzFormModule, NzInputModule, NzRadioModule, NzSelectModule, NzDatePickerModule, NzCheckboxModule, NzDatePickerModule,
+  imports: [ReactiveFormsModule, NgxMaskDirective, NzButtonModule, NgxSpinnerModule, NzFormModule, NzInputModule, NzSelectModule, NzDatePickerModule, NzDatePickerModule,
     SelectAutocompleteComponent, NzCardModule, NzIconModule, NzTooltipModule, CurrencyPipe
   ],
   templateUrl: './form-proposal.html',
@@ -34,32 +33,32 @@ import { CurrencyPipe } from '@angular/common';
 })
 export class FormProposal implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-    formProposal!: FormGroup;
-    clients: Client[] = [];
+  formProposal!: FormGroup;
+  clients: Client[] = [];
 
-    constructor(private formBuilder: FormBuilder,
-      private toastr: ToastrService, private spinnerService: NgxSpinnerService,
-      private proposalService: ProposalService, private clientService: ClientService, private modalRef: NzModalRef, @Inject(NZ_MODAL_DATA) public data: { proposalId: string }){
-    }
-  
-    ngOnInit(): void {
-      this.formProposal = this.formBuilder.group({
-        clientId: [null, [Validators.required]],
-        clientName: ['', [Validators.required]],
-        title: [null, [Validators.required, Validators.maxLength(100)]],
-        currency: ['BRL', [Validators.required]],
-        validUntil: [null, Validators.required],
-        items: this.formBuilder.array([this.createItem()])
-      });
-      this.getClients({pageSize: 20});
-      if (this.data?.proposalId) {
-        this.getClient();
-      }
-      
+  constructor(private formBuilder: FormBuilder,
+    private toastr: ToastrService, private spinnerService: NgxSpinnerService,
+    private proposalService: ProposalService, private clientService: ClientService, private modalRef: NzModalRef, @Inject(NZ_MODAL_DATA) public data: { proposalId: string }) {
+  }
+
+  ngOnInit(): void {
+    this.formProposal = this.formBuilder.group({
+      clientId: [null, [Validators.required]],
+      clientName: ['', [Validators.required]],
+      title: [null, [Validators.required, Validators.maxLength(100)]],
+      currency: ['BRL', [Validators.required]],
+      validUntil: [null, Validators.required],
+      items: this.formBuilder.array([this.createItem()])
+    });
+    this.getClients({ pageSize: 20 });
+    if (this.data?.proposalId) {
+      this.getClient();
     }
 
-    getClient() {
-      this.proposalService.getProposalById(this.data.proposalId)
+  }
+
+  getClient() {
+    this.proposalService.getProposalById(this.data.proposalId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
@@ -72,7 +71,7 @@ export class FormProposal implements OnInit, OnDestroy {
           });
 
           const itemsFormArray = this.items;
-          itemsFormArray.clear(); 
+          itemsFormArray.clear();
 
           if (res.items && res.items.length) {
             res.items.forEach((item: any) => {
@@ -91,132 +90,132 @@ export class FormProposal implements OnInit, OnDestroy {
           }
         }
       })
-    }
+  }
 
-    ngOnDestroy(): void {
-      this.destroy$.next();
-      this.destroy$.complete();
-    }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
-    createItem(): FormGroup {
-      return this.formBuilder.group({
-        id: [null],
-        name: ['', Validators.required],
-        description: ['', Validators.required],
-        quantity: [null, [Validators.required, Validators.pattern(/^\d{1,3}$/)]], // 1 a 3 dígitos
-        unitPrice: [null, Validators.required]
-      });
-    }
+  createItem(): FormGroup {
+    return this.formBuilder.group({
+      id: [null],
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      quantity: [null, [Validators.required, Validators.pattern(/^\d{1,3}$/)]], // 1 a 3 dígitos
+      unitPrice: [null, Validators.required]
+    });
+  }
 
-    addItem() {
-      this.items.push(this.createItem());
-    }
+  addItem() {
+    this.items.push(this.createItem());
+  }
 
-    removeItem(index: number) {
-      this.items.removeAt(index);
-    }
+  removeItem(index: number) {
+    this.items.removeAt(index);
+  }
 
-    getClients(params: any) {
-      this.clientService.getClients(params)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: (res) => {
-            this.clients = res.data;
-          }
-        });
-    }
-
-    onChangeClient(event: any) {
-      const name = typeof event === 'string' ? event : event?.target?.value || '';
-      this.getClients({ name });
-    }
-
-    clientSelected(client: Client) {
-      this.formProposal.patchValue({
-        clientId: client.id,
-        clientName: client.name
-      });
-    }
-
-     clientDeselected() {
-        this.formProposal.patchValue({
-          clientId: null,
-          clientName: null
-        });
-      }
-  
-    onSubmit(){
-      if(this.formProposal.valid){
-        const form = this.formProposal.value;
-        const proposal = <CreateProposal>{
-          clientId: form.clientId,
-          title: form.title,
-          currency: form.currency,
-          validUntil: form.validUntil.toISOString().split('T')[0],
-          items: form.items,
-        };
-        
-      
-        if(this.data && this.data.proposalId){
-          this.updateCliente(proposal);
-        }else{
-          this.cadastrarProposal(proposal);
-        }
-      }else{
-        FormUtils.markFormGroupTouched(this.formProposal);
-      }
-    }
-  
-    cadastrarProposal(proposal: CreateProposal){
-      this.spinnerService.show();
-      this.proposalService.createProposal(proposal).subscribe({
+  getClients(params: any) {
+    this.clientService.getClients(params)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
         next: (res) => {
-          this.toastr.success('Proposta cadastrada!', 'Sucesso!');
-          this.modalRef.close(true);
-        },
-        error: () => {
-          this.spinnerService.hide();
-        },
-        complete: () => {
-          this.spinnerService.hide();
+          this.clients = res.data;
         }
-      })
-    }
-  
-    updateCliente(proposal: CreateProposal){
-      this.spinnerService.show();
-      proposal.id = this.data.proposalId;
-      this.proposalService.updateProposal(proposal).subscribe({
-        next: () => {
-          this.toastr.success('Proposta atualizada!', 'Sucesso!');
-          this.modalRef.close(true);
-        },
-        error: () => {
-          this.spinnerService.hide();
-        },
-        complete: () => {
-          this.spinnerService.hide();
-        }
-      })
-    }
-  
-    getMaskCpfCnpj(){
-      return this.formProposal.get('tipoPessoa')?.value == 'PESSOA_FISICA' ? '000.000.000-00' : '00.000.000/0000-00';
-    }
+      });
+  }
 
-    get items(): FormArray {
-      return this.formProposal.get('items') as FormArray;
-    }
+  onChangeClient(event: any) {
+    const name = typeof event === 'string' ? event : event?.target?.value || '';
+    this.getClients({ name });
+  }
 
-    get clientNameControl(): FormControl {
-      return this.formProposal.get('clientName') as FormControl;
-    }
+  clientSelected(client: Client) {
+    this.formProposal.patchValue({
+      clientId: client.id,
+      clientName: client.name
+    });
+  }
 
-    get totalProposal(): number {
-      return this.items.controls.reduce((total, item) => {
-        const quantity = item.get('quantity')?.value || 0;
-        const unitPrice = item.get('unitPrice')?.value || 0;
-        return total + quantity * unitPrice;
-      }, 0);
+  clientDeselected() {
+    this.formProposal.patchValue({
+      clientId: null,
+      clientName: null
+    });
+  }
+
+  onSubmit() {
+    if (this.formProposal.valid) {
+      const form = this.formProposal.value;
+      const proposal = <CreateProposal>{
+        clientId: form.clientId,
+        title: form.title,
+        currency: form.currency,
+        validUntil: form.validUntil.toISOString().split('T')[0],
+        items: form.items,
+      };
+
+
+      if (this.data && this.data.proposalId) {
+        this.updateCliente(proposal);
+      } else {
+        this.cadastrarProposal(proposal);
+      }
+    } else {
+      FormUtils.markFormGroupTouched(this.formProposal);
     }
+  }
+
+  cadastrarProposal(proposal: CreateProposal) {
+    this.spinnerService.show();
+    this.proposalService.createProposal(proposal).subscribe({
+      next: (res) => {
+        this.toastr.success('Proposta cadastrada!', 'Sucesso!');
+        this.modalRef.close(true);
+      },
+      error: () => {
+        this.spinnerService.hide();
+      },
+      complete: () => {
+        this.spinnerService.hide();
+      }
+    })
+  }
+
+  updateCliente(proposal: CreateProposal) {
+    this.spinnerService.show();
+    proposal.id = this.data.proposalId;
+    this.proposalService.updateProposal(proposal).subscribe({
+      next: () => {
+        this.toastr.success('Proposta atualizada!', 'Sucesso!');
+        this.modalRef.close(true);
+      },
+      error: () => {
+        this.spinnerService.hide();
+      },
+      complete: () => {
+        this.spinnerService.hide();
+      }
+    })
+  }
+
+  getMaskCpfCnpj() {
+    return this.formProposal.get('tipoPessoa')?.value == 'PESSOA_FISICA' ? '000.000.000-00' : '00.000.000/0000-00';
+  }
+
+  get items(): FormArray {
+    return this.formProposal.get('items') as FormArray;
+  }
+
+  get clientNameControl(): FormControl {
+    return this.formProposal.get('clientName') as FormControl;
+  }
+
+  get totalProposal(): number {
+    return this.items.controls.reduce((total, item) => {
+      const quantity = item.get('quantity')?.value || 0;
+      const unitPrice = item.get('unitPrice')?.value || 0;
+      return total + quantity * unitPrice;
+    }, 0);
+  }
 }

@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { SubscriptionService } from '../../../shared/services/subscription.service';
 import { Subject, takeUntil } from 'rxjs';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzTagModule } from 'ng-zorro-antd/tag';
@@ -9,6 +8,7 @@ import { NzResultModule } from 'ng-zorro-antd/result';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { SubscriptionAccountResponse } from '../../../core/models/subscription-account-response.interface';
+import { AccountService } from '../../../shared/services/account.service';
 
 @Component({
   selector: 'app-subscription-account',
@@ -21,7 +21,7 @@ export class SubscriptionAccount implements OnInit, OnDestroy {
   subscriptionAccount!: SubscriptionAccountResponse;
   subscriptionInactive: boolean = false;
 
-  constructor(private subscriptionService: SubscriptionService){}
+  constructor(private accountService: AccountService){}
 
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -32,7 +32,7 @@ export class SubscriptionAccount implements OnInit, OnDestroy {
   }
 
   getSubscription(){
-    this.subscriptionService.getSubscriptionsAccount()
+    this.accountService.getSubscriptionsAccount()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {

@@ -1,0 +1,105 @@
+<div class="container">
+    <div style="display: flex;">
+        <h2 nz-title class="text-center me-2">Assinaturas</h2>
+        <btn-novo title="Nova assinatura" (clickEvent)="openNewSubscriptionModal()">
+        </btn-novo>
+    </div>
+
+    <form nz-form [formGroup]="filtroForm" (ngSubmit)="getSubscriptions()" nzLayout="vertical">
+        <div nz-row [nzGutter]="12">
+            <div nz-col [nzSpan]="6">
+                <nz-form-item>
+                    <nz-form-label for="tenantFilter">Tenant</nz-form-label>
+                    <nz-form-control>
+                        <input formControlName="tenantFilter" id="tenantFilter" placeholder="Tenant" nz-input />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6">
+                <nz-form-item>
+                    <nz-form-label for="planFilter">Plano</nz-form-label>
+                    <nz-form-control>
+                        <nz-select id="planFilter" formControlName="planFilter">
+                            <nz-option [nzValue]="''" nzLabel="Todos"></nz-option>
+                            @for(plan of subscriptionPlans; track $index){
+                            <nz-option [nzValue]="plan.id" [nzLabel]="plan.name"></nz-option>
+                            }
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6">
+                <nz-form-item>
+                    <nz-form-label for="statusFilter">Status</nz-form-label>
+                    <nz-form-control>
+                        <nz-select id="statusFilter" formControlName="statusFilter">
+                            <nz-option [nzValue]="''" nzLabel="Todos"></nz-option>
+                            @for(status of subscriptionStatus; track $index){
+                            <nz-option [nzValue]="status" [nzLabel]="status"></nz-option>
+                            }
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="6">
+                <nz-form-item>
+                    <nz-form-label for="dateRange">Data Inicio</nz-form-label>
+                    <nz-form-control>
+                        <nz-range-picker class="me-1" formControlName="dateRange" nzFormat="dd/MM/yyyy">
+                        </nz-range-picker>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row class="mt-2 mb-2">
+            <div nz-col [nzXs]="24" [nzMd]="12">
+                <btn-pesquisar class="me-1"></btn-pesquisar>
+                <btn-limpar (clickEvent)="limpar()"></btn-limpar>
+            </div>
+        </div>
+    </form>
+
+    <div class="d-flex justify-content-between align-items-center p-2 mb-2">
+        <nz-pagination nzSize="small" [nzTotal]="paginatedSubscriptions.count"
+            [(nzPageIndex)]="paginatedSubscriptions.pageIndex" [nzPageSize]="paginatedSubscriptions.pageSize"
+            (nzPageIndexChange)="onPageChange($event)" (nzPageSizeChange)="onPageSizeChange($event)"
+            [nzShowSizeChanger]="true" [nzPageSizeOptions]="[2,5,10]" style="max-width: 600px; width: 100%;">
+        </nz-pagination>
+    </div>
+
+    <nz-table [nzData]="paginatedSubscriptions.data" [nzFrontPagination]="false" [nzSize]="'small'" [nzBordered]="true">
+        <thead>
+            <tr>
+                <th>Tenant</th>
+                <th>Plano</th>
+                <th>Valor Plano</th>
+                <th>Data Inicio</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for(subscription of paginatedSubscriptions.data; track subscription.id){
+            <tr>
+                <td>{{ subscription.tenant.name }}</td>
+                <td>{{ subscription.subscriptionPlan.name }}</td>
+                <td>{{ subscription.subscriptionPlan.price | currency: 'BRL' }}</td>
+                <td>{{ subscription.startDate | date: 'dd/MM/yyyy'}}</td>
+                <td>{{ subscription.status }}</td>
+                <td>
+                    <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1"
+                        nz-button nzType="primary" (click)="openEditSubscriptionModal(subscription)">
+                        <span nz-icon nzType="edit"></span>
+                    </button>
+                    <button hasRole="DELETE_USER" nz-tooltip nzTooltipTitle="Excluir" nzTooltipPlacement="top" nz-button
+                        nzType="primary" (click)="showConfirm(subscription.id)" nzDanger>
+                        <span nz-icon nzType="delete"></span>
+                    </button>
+                </td>
+            </tr>
+            }@empty {}
+        </tbody>
+    </nz-table>
+
+</div>

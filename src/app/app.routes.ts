@@ -20,6 +20,7 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'users', pathMatch: 'full' },
       { path: 'tenants', loadChildren: () => import('./features/tenant/tenant.routes').then(m => m.TENANT_ROUTES) },
+      { path: 'subscriptions', loadChildren: () => import('./features/subscription/subscription.routes').then(m => m.SUBSCRIPTION_ROUTES) },
       { path: 'users', loadChildren: () => import('./features/user/user.routes').then(m => m.USER_ROUTES) },
       { path: 'clients', loadChildren: () => import('./features/client/client.routes').then(m => m.CLIENT_ROUTES) },
       { path: 'proposals', loadChildren: () => import('./features/proposal/proposal.routes').then(m => m.PROPOSAL_ROUTES) },

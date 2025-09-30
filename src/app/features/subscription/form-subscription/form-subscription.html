@@ -1,0 +1,76 @@
+<form nz-form [formGroup]="formSubscription" (ngSubmit)="onSubmit()" nzLayout="vertical">
+    <nz-row [nzGutter]="16">
+        <nz-col [nzSpan]="12">
+            <nz-form-item>
+                <nz-form-label [nzSpan]="24" nzRequired="">Tenant</nz-form-label>
+                <nz-form-control [nzSpan]="24">
+                    <select-autocomplete [valorInicial]="formSubscription.get('tenantName')?.value"
+                        [shouldReset]="false" [title]="'Selecione o tenant'" [filterBy]="'name'"
+                        (selectedEvent)="tenantSelected($event)" (changeEvent)="onChangeTenant($event)"
+                        (deselectEvent)="tenantDeselected()" [items]="tenants"
+                        [invalid]="tenantNameControl.invalid && tenantNameControl.touched"></select-autocomplete>
+                    @if(tenantNameControl.invalid && tenantNameControl.touched){
+                    <div>
+                        @if(tenantNameControl.hasError('required')){
+                        <span class="text-danger">
+                            O campo é obrigatório.
+                        </span>
+                        }
+                    </div>
+                    }
+                </nz-form-control>
+            </nz-form-item>
+        </nz-col>
+
+        <nz-col [nzSpan]="12">
+            <nz-form-item>
+                <nz-form-label [nzSpan]="24" nzRequired="">Plano</nz-form-label>
+                <nz-form-control [nzSpan]="24" [nzErrorTip]="planErrorTpl">
+                    <nz-select id="subscriptionPlanId" formControlName="subscriptionPlanId">
+                        <nz-option [nzValue]="''" nzLabel="Selecione um plano..." nzDisabled></nz-option>
+                        @for(plan of subscriptionPlans; track $index){
+                        <nz-option [nzValue]="plan.id" [nzLabel]="getNomePlan(plan.name, plan.price)"></nz-option>
+                        }
+                    </nz-select>
+                    <ng-template #planErrorTpl let-control>
+                        @if (control.hasError('required')) {
+                            O campo é obrigatório
+                        }
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </nz-col>
+
+        <nz-col [nzSpan]="12">
+            <nz-form-item>
+                <nz-form-label [nzSpan]="24" nzRequired>Forma de pagamento</nz-form-label>
+                <nz-form-control [nzSpan]="24" [nzErrorTip]="billingTypeErrorTpl">
+                    <nz-select id="billingType" formControlName="billingType">
+                        <nz-option [nzValue]="''" nzLabel="Selecione uma forma..." nzDisabled></nz-option>
+                        @for(billingType of billingTypes; track $index){
+                            <nz-option [nzValue]="billingType" [nzLabel]="billingType"></nz-option>
+                        }
+                    </nz-select>
+                    <ng-template #billingTypeErrorTpl let-control>
+                        @if (control.hasError('required')) {
+                            O campo é obrigatório
+                        }
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </nz-col>
+
+
+    </nz-row>
+
+    <!-- Botões -->
+    <nz-form-item class="mt-4">
+        <nz-form-control>
+            <button nz-button nzType="primary">
+                {{ data && data.subscriptionId ? 'Editar' : 'Cadastrar' }}
+            </button>
+        </nz-form-control>
+    </nz-form-item>
+</form>
+
+<ngx-spinner type="ball-clip-rotate-multiple"></ngx-spinner>
