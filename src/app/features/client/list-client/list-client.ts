@@ -47,13 +47,7 @@ export class ListClient implements OnInit, OnDestroy {
     }
     filtroForm!: FormGroup;
     mask: string = '';
-
-    checked = false;
-    indeterminate = false;
-    setOfCheckedId = new Set<string>();
-    isLoadingUpdateTiers = false;
     paginatedClients: PaginatedResult<Client> = <PaginatedResult<Client>>{};
-    isLoading = false;
 
     ngOnInit(): void {
       this.getClients();
@@ -71,18 +65,11 @@ export class ListClient implements OnInit, OnDestroy {
         name: this.filtroForm.get('nameFilter')?.value,
         document: this.filtroForm.get('document')?.value
       };
-      this.isLoading = true;
       this.clientService.getClients(params)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (res) => {
             this.paginatedClients = res;
-          },
-          error: () => {
-            this.isLoading = false;
-          },
-          complete: () => {
-            this.isLoading = false;
           }
         })
     }

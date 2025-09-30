@@ -1,43 +1,43 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { FormUtils } from '../../../shared/utils/form.utils';
-import { Subject, takeUntil } from 'rxjs';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ViaCepService } from '../../../shared/services/viacep.service';
-import { ToastrService } from 'ngx-toastr';
-import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal';
-import { ClientService } from '../../../shared/services/client.service';
-import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
-import { EnderecoViaCep } from '../../../core/models/endereco-viacep.interface';
-import { Client } from '../../../core/models/client.interface';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NgxMaskDirective } from 'ngx-mask';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
-import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NgxMaskDirective } from 'ngx-mask';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { Subject, takeUntil } from 'rxjs';
+import { ViaCepService } from '../../../shared/services/viacep.service';
+import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal';
+import { ToastrService } from 'ngx-toastr';
+import { TenantService } from '../../../shared/services/tenant.service';
+import { EnderecoViaCep } from '../../../core/models/endereco-viacep.interface';
+import { Tenant } from '../../../core/models/tenant.interface';
+import { FormUtils } from '../../../shared/utils/form.utils';
 
 @Component({
-  standalone: true,
-  selector: 'app-form-client',
+  selector: 'app-form-tenant',
   imports: [ReactiveFormsModule, NgxMaskDirective, NzButtonModule, NgxSpinnerModule, NzFormModule, NzInputModule, NzRadioModule, NzSelectModule, NzDatePickerModule, NzCheckboxModule],
-  templateUrl: './form-client.html',
-  styleUrl: './form-client.css'
+  templateUrl: './form-tenant.html',
+  styleUrl: './form-tenant.css'
 })
-export class FormClient implements OnInit, OnDestroy {
+export class FormTenant implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-    formClient!: FormGroup;
+    formTenant!: FormGroup;
 
     constructor(private viaCepService: ViaCepService, private formBuilder: FormBuilder,
       private toastr: ToastrService, private spinnerService: NgxSpinnerService,
-      private clientService: ClientService, private modalRef: NzModalRef, @Inject(NZ_MODAL_DATA) public data: { clientId: string }){
+      private tenantService: TenantService, private modalRef: NzModalRef, @Inject(NZ_MODAL_DATA) public data: { tenantId: string }){
     }
   
     ngOnInit(): void {
-      this.formClient = this.formBuilder.group({
+      this.formTenant = this.formBuilder.group({
         name: [null, [Validators.required, Validators.maxLength(100)]],
         tipoPessoa: ['PESSOA_FISICA'],
+        domain: [null, [Validators.required, Validators.maxLength(100)]],
         document: [null, Validators.required],
         email: [null, [Validators.required, Validators.email]],
         phoneNumber: [null, [Validators.required]],
@@ -59,7 +59,7 @@ export class FormClient implements OnInit, OnDestroy {
       this.destroy$.complete();
     }
   
-    getClient() {
+    getTenant() {
       // this.spinnerService.show();
     
       // this.parteService.getParteById(this.data.parteId)
@@ -117,7 +117,7 @@ export class FormClient implements OnInit, OnDestroy {
     }
   
     getCep() {
-      const cep = this.formClient.get('address.addressZipCode')?.value;
+      const cep = this.formTenant.get('address.addressZipCode')?.value;
       if (cep && cep.length > 7) {
         this.spinnerService.show();
         this.viaCepService.getCep(cep)
@@ -130,19 +130,23 @@ export class FormClient implements OnInit, OnDestroy {
                 return;
               }
 
-              this.formClient.get('address.addressCity')?.setValue(resCep.localidade);
-              this.formClient.get('address.addressCity')?.disable();
-              this.formClient.get('address.addressState')?.setValue(resCep.uf);
-              this.formClient.get('address.addressState')?.disable();
+              this.formTenant.get('address.addressCity')?.setValue(resCep.localidade);
+              this.formTenant.get('address.addressCity')?.disable();
+              this.formTenant.get('address.addressState')?.setValue(resCep.uf);
+              this.formTenant.get('address.addressState')?.disable();
 
               if(resCep.logradouro?.trim()){
-                this.formClient.get('address.addressStreet')?.setValue(resCep.logradouro);
-                this.formClient.get('address.addressStreet')?.disable();
+                this.formTenant.get('address.addressStreet')?.setValue(resCep.logradouro);
+                this.formTenant.get('address.addressStreet')?.disable();
+              }else{
+                this.formTenant.get('address.addressStreet')?.enable();
               }
 
               if(resCep.bairro?.trim()){
-                this.formClient.get('address.addressDistrict')?.setValue(resCep.bairro);
-                this.formClient.get('address.addressDistrict')?.disable();
+                this.formTenant.get('address.addressDistrict')?.setValue(resCep.bairro);
+                this.formTenant.get('address.addressDistrict')?.disable();
+              }else{
+                this.formTenant.get('address.addressDistrict')?.enable();
               }
             },
             error: () => {
@@ -156,11 +160,12 @@ export class FormClient implements OnInit, OnDestroy {
     }
   
     onSubmit(){
-      if(this.formClient.valid){
-        const address = this.formClient.getRawValue().address;
-        const form = this.formClient.value;
-        const client = <Client>{
+      if(this.formTenant.valid){
+        const address = this.formTenant.getRawValue().address;
+        const form = this.formTenant.value;
+        const tenant = <Tenant>{
           name: form.name,
+          domain: form.domain,
           email: form.email,
           document: form.document,
           phoneNumber: form.phoneNumber,
@@ -174,21 +179,21 @@ export class FormClient implements OnInit, OnDestroy {
         };
         
       
-        if(this.data && this.data.clientId){
-          this.updateCliente(client);
+        if(this.data && this.data.tenantId){
+          this.updateCliente(tenant);
         }else{
-          this.cadastrarCliente(client);
+          this.cadastrarCliente(tenant);
         }
       }else{
-        FormUtils.markFormGroupTouched(this.formClient);
+        FormUtils.markFormGroupTouched(this.formTenant);
       }
     }
   
-    cadastrarCliente(client: Client){
+    cadastrarCliente(tenant: Tenant){
       this.spinnerService.show();
-      this.clientService.createClient(client).subscribe({
+      this.tenantService.createTenant(tenant).subscribe({
         next: (res) => {
-          this.toastr.success('Cliente cadastrado!', 'Sucesso!');
+          this.toastr.success('Tenant cadastrado!', 'Sucesso!');
           this.modalRef.close(true);
         },
         error: () => {
@@ -200,12 +205,12 @@ export class FormClient implements OnInit, OnDestroy {
       })
     }
   
-    updateCliente(client: Client){
+    updateCliente(tenant: Tenant){
       this.spinnerService.show();
-      client.id = this.data.clientId;
-      this.clientService.updateClient(client).subscribe({
+      tenant.id = this.data.tenantId;
+      this.tenantService.updateTenant(tenant).subscribe({
         next: () => {
-          this.toastr.success('Cliente atualizado!', 'Sucesso!');
+          this.toastr.success('Tenant atualizado!', 'Sucesso!');
           this.modalRef.close(true);
         },
         error: () => {
@@ -218,6 +223,6 @@ export class FormClient implements OnInit, OnDestroy {
     }
   
     getMaskCpfCnpj(){
-      return this.formClient.get('tipoPessoa')?.value == 'PESSOA_FISICA' ? '000.000.000-00' : '00.000.000/0000-00';
+      return this.formTenant.get('tipoPessoa')?.value == 'PESSOA_FISICA' ? '000.000.000-00' : '00.000.000/0000-00';
     }
 }

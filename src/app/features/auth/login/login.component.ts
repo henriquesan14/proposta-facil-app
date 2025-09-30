@@ -47,8 +47,12 @@ export class LoginComponent {
     this.authService.login(credentials).subscribe({
       next: (res) => {
         this.localStorageService.setUserStorage(res);
-        this.router.navigate(['/users/list']);
         this.loading = false;
+        if(res.role == 'AdminTenant'){
+          this.router.navigate(['/users/list']);
+          return;
+        }
+        return this.router.navigate(['/tenants/list']);
       },
       error: () => {
         this.loading = false;

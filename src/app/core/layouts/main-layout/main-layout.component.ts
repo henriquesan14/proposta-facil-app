@@ -34,7 +34,7 @@ export class MainLayoutComponent {
       title: 'Tenants',
       icon: 'home',
       role: 'AdminSystem',
-      route: 'tenant/list'
+      route: 'tenants/list'
     },
     {
       title: 'Usuários',

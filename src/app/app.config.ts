@@ -7,7 +7,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { registerLocaleData } from '@angular/common';
 import pt from '@angular/common/locales/pt';
 import { provideNzIcons } from 'ng-zorro-antd/icon';
-import { CloseCircleOutline, CloseOutline, DeleteOutline, FileDoneOutline, HomeOutline, LockOutline, LogoutOutline, MenuFoldOutline, MenuUnfoldOutline, PlusCircleOutline, SearchOutline, SendOutline, SettingOutline, UsergroupAddOutline, UserOutline } from '@ant-design/icons-angular/icons';
+import { CloseCircleOutline, CloseOutline, DeleteOutline, EyeOutline, FileDoneOutline, HomeOutline, LockOutline, LogoutOutline, MenuFoldOutline, MenuUnfoldOutline, PlusCircleOutline, SearchOutline, SendOutline, SettingOutline, UsergroupAddOutline, UserOutline } from '@ant-design/icons-angular/icons';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideToastr } from 'ngx-toastr';
 import { CredentialsInterceptor } from './core/interceptors/credentials.interceptor';
@@ -29,7 +29,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     provideNgxMask(),
     provideNzIcons([UserOutline, LockOutline, MenuFoldOutline, MenuUnfoldOutline, SettingOutline, LogoutOutline, CloseOutline, SearchOutline, PlusCircleOutline, UsergroupAddOutline, FileDoneOutline, CloseCircleOutline, 
-      DeleteOutline, SendOutline, LockOutline, HomeOutline]),
+      DeleteOutline, SendOutline, LockOutline, HomeOutline, EyeOutline]),
     provideAnimationsAsync(),
     provideToastr(),
   ]
