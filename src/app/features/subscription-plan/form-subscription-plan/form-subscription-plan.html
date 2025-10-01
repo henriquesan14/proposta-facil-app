@@ -1,0 +1,73 @@
+<form nz-form [formGroup]="formSubscriptionPlan" (ngSubmit)="onSubmit()" nzLayout="vertical">
+    <nz-row [nzGutter]="16">
+        <nz-col [nzSpan]="12">
+            <nz-form-item>
+                <nz-form-label [nzRequired]="true" nzFor="name">Nome</nz-form-label>
+                <nz-form-control [nzErrorTip]="nameErrorTpl">
+                    <input nz-input formControlName="name" id="name" maxlength="100" />
+                    <ng-template #nameErrorTpl let-control>
+                        @if (control.hasError('required')) {
+                        O campo é obrigatório
+                        }
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </nz-col>
+
+        <nz-col [nzSpan]="12">
+            <nz-form-item>
+                <nz-form-label nzFor="maxProposalsPerMonth" [nzRequired]="true">Qtd. propostas</nz-form-label>
+                <nz-form-control [nzErrorTip]="maxProposalsErrorTpl">
+                    <input nz-input [mask]="'0?0?0?0'" [validation]="false" [dropSpecialCharacters]="false"
+                        placeholder="Qtd." formControlName="maxProposalsPerMonth" />
+                    <ng-template #maxProposalsErrorTpl let-control>
+                        @if (control.hasError('required')) {
+                        O campo é obrigatório
+                        }
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </nz-col>
+
+        <nz-col [nzSpan]="12">
+            <nz-form-item>
+                <nz-form-control [nzErrorTip]="priceErrorTpl">
+                    <nz-form-label nzFor="price" nzRequired>Preço</nz-form-label>
+                    <input mask="separator.2" [dropSpecialCharacters]="true" nz-input placeholder="Preço unitário"
+                        formControlName="price" maxlength="8" />
+                    <ng-template #priceErrorTpl let-control>
+                        @if (control.hasError('required')) {
+                        O campo é obrigatório
+                        }
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </nz-col>
+
+        <nz-col [nzSpan]="12">
+            <nz-form-item>
+                <nz-form-control [nzErrorTip]="descriptionErrorTpl">
+                    <nz-form-label nzFor="description" nzRequired>Descrição</nz-form-label>
+                    <textarea rows="4" nz-input placeholder="Descrição" formControlName="description"></textarea>
+                    <ng-template #descriptionErrorTpl let-control>
+                        @if (control.hasError('required')) {
+                            O campo é obrigatório
+                        }
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+        </nz-col>
+
+    </nz-row>
+
+    <!-- Botões -->
+    <nz-form-item class="mt-4">
+        <nz-form-control>
+            <button nz-button nzType="primary">
+                {{ data && data.subscriptionPlanId ? 'Editar' : 'Cadastrar' }}
+            </button>
+        </nz-form-control>
+    </nz-form-item>
+</form>
+
+<ngx-spinner type="ball-clip-rotate-multiple"></ngx-spinner>

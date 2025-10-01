@@ -1,0 +1,60 @@
+<div class="container">
+    <div style="display: flex;">
+        <h2 nz-title class="text-center me-2">Planos</h2>
+        <btn-novo title="Novo plano" (clickEvent)="openNewSubscriptionPlanModal()">
+        </btn-novo>
+    </div>
+
+    <form nz-form [formGroup]="filtroForm" (ngSubmit)="getSubscriptionPlans()" nzLayout="vertical">
+        <div nz-row [nzGutter]="12">
+            <div nz-col [nzSpan]="6">
+                <nz-form-item>
+                    <nz-form-label for="nameFilter">Nome</nz-form-label>
+                    <nz-form-control>
+                        <input formControlName="nameFilter" id="nameFilter" placeholder="Nome" nz-input />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+    
+        </div>
+        <div nz-row class="mt-2 mb-2">
+            <div nz-col [nzXs]="24" [nzMd]="12">
+                <btn-pesquisar class="me-1"></btn-pesquisar>
+                <btn-limpar (clickEvent)="limpar()"></btn-limpar>
+            </div>
+        </div>
+    </form>
+
+    <nz-table [nzData]="subscriptionPlans" [nzFrontPagination]="false" [nzSize]="'small'" [nzBordered]="true">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Valor</th>
+                <th>Qtd. Propostas</th>
+                <th>Descrição</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for(subscriptionPlan of subscriptionPlans; track subscriptionPlan.id){
+            <tr>
+                <td>{{ subscriptionPlan.name }}</td>
+                <td>{{ subscriptionPlan.price | currency: 'BRL' }}</td>
+                <td>{{ subscriptionPlan.maxProposalsPerMonth}}</td>
+                <td>{{ subscriptionPlan.description }}</td>
+                <td>
+                    <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1"
+                        nz-button nzType="primary" (click)="openEditSubscriptionModal(subscriptionPlan)">
+                        <span nz-icon nzType="edit"></span>
+                    </button>
+                    <button hasRole="DELETE_USER" nz-tooltip nzTooltipTitle="Excluir" nzTooltipPlacement="top" nz-button
+                        nzType="primary" (click)="showConfirm(subscriptionPlan.id)" nzDanger>
+                        <span nz-icon nzType="delete"></span>
+                    </button>
+                </td>
+            </tr>
+            }@empty {}
+        </tbody>
+    </nz-table>
+
+</div>

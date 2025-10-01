@@ -21,4 +21,16 @@ export class SubscriptionPlanService {
     return this.http.get<SubscriptionPlan[]>(`${this.API}/`, {params});
   }
 
+  createSubscriptionPlan(subscriptionPlan: SubscriptionPlan){
+    return this.http.post(`${this.API}`, subscriptionPlan);
+  }
+
+  updateSubscriptionPlan(subscriptionPlan: SubscriptionPlan){
+    return this.http.put(`${this.API}`, subscriptionPlan);
+  }
+
+  deleteSubscriptionPlan(id: string){
+    return this.http.delete(`${this.API}/${id}`,);
+  }
+
 }

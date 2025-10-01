@@ -43,6 +43,12 @@ export class MainLayoutComponent {
       route: 'subscriptions/list'
     },
     {
+      title: 'Planos',
+      icon: 'bulb',
+      role: 'AdminSystem',
+      route: 'subscription-plans/list'
+    },
+    {
       title: 'Usuários',
       icon: 'user',
       role: 'AdminTenant',
