@@ -49,40 +49,6 @@
     <nz-row [nzGutter]="16">
         <nz-col [nzSpan]="20">
             <nz-form-item>
-                <nz-form-label nzFor="password" [nzRequired]="!isEditing">
-                    <span>{{passwordLabel}}</span>
-                </nz-form-label>
-                <nz-form-control [nzErrorTip]="
-    userForm.get('password')?.hasError('required') ? 'Por favor, insira a senha do usuário.' :
-    userForm.get('password')?.hasError('minlength') ? 'A senha deve ter no mínimo 6 caracteres.' : ''
-">
-                    <input autocomplete="new-password" nz-input type="password" id="password" formControlName="password"
-                        placeholder="Senha" maxlength="30" />
-                </nz-form-control>
-            </nz-form-item>
-        </nz-col>
-    </nz-row>
-
-    <nz-row [nzGutter]="16">
-        <nz-col>
-            <nz-form-item>
-                <nz-form-label nzFor="confirmPassword" [nzRequired]="!isEditing">
-                    <span>Confirm Password</span>
-                </nz-form-label>
-                <nz-form-control [nzErrorTip]="
-    userForm.get('confirmPassword')?.hasError('required') ? 'Confirme a senha.' :
-    userForm.get('confirmPassword')?.hasError('notMatch') ? 'As senhas não coincidem.' : ''
-">
-                    <input autocomplete="new-password" nz-input type="password" id="confirmPassword"
-                        formControlName="confirmPassword" placeholder="Confirmação de senha" maxlength="30" />
-                </nz-form-control>
-            </nz-form-item>
-        </nz-col>
-    </nz-row>
-
-    <nz-row [nzGutter]="16">
-        <nz-col [nzSpan]="20">
-            <nz-form-item>
                 <nz-form-label nzRequired>
                     <span>Role</span>
                 </nz-form-label>

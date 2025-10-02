@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { User } from '../../core/models/user.interface';
+import { ActivateAccountRequest } from '../../core/models/activate-account-request.interface';
+
 
 @Injectable({
   providedIn: 'root'
@@ -22,5 +24,9 @@ export class AuthService {
 
     logout(){
       return this.http.post(`${this.API}/logout`, {},);
+    }
+
+    activateAccount(activateAccount: ActivateAccountRequest){
+      return this.http.post(`${this.API}/activate-account`, activateAccount);
     }
 }

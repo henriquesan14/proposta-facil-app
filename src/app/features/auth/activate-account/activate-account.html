@@ -1,0 +1,34 @@
+<div class="login-container">
+    <nz-card class="login-card">
+        <div class="login-header">
+            <img src="/images/icon.png" alt="Proposta Fácil Logo" class="lol-icon" />
+            <h2 class="login-title">Proposta Fácil</h2>
+            <h3 class="login-subtitle">Para ativar a conta informe uma senha:</h3>
+        </div>
+        <form nz-form [formGroup]="activateForm" class="login-form" (submit)="onSubmit()">
+            <nz-form-item>
+                <nz-form-control [nzErrorTip]="
+    activateForm.get('password')?.hasError('required') ? 'Por favor, insira a senha do usuário.' :
+    activateForm.get('password')?.hasError('minlength') ? 'A senha deve ter no mínimo 6 caracteres.' : ''
+">
+                    <nz-input-group nzPrefixIcon="lock">
+                        <input autocomplete="new-password" nz-input type="password" id="password"
+                            formControlName="password" placeholder="Senha" maxlength="30" />
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-control [nzErrorTip]="
+    activateForm.get('confirmPassword')?.hasError('required') ? 'Confirme a senha.' :
+    activateForm.get('confirmPassword')?.hasError('notMatch') ? 'As senhas não coincidem.' : ''">
+                    <nz-input-group nzPrefixIcon="lock">
+                        <input autocomplete="new-password" nz-input type="password" id="confirmPassword"
+                            formControlName="confirmPassword" placeholder="Confirmação de senha" maxlength="30" />
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+            <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'"
+                [nzLoading]="loading">Ativar conta</button>
+        </form>
+    </nz-card>
+</div>

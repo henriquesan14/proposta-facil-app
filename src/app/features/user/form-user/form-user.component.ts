@@ -4,14 +4,12 @@ import { Subject, takeUntil } from 'rxjs';
 import { UserService } from '../../../shared/services/user.service';
 import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal';
 import { ToastrService } from 'ngx-toastr';
-import { User } from '../../../core/models/user.interface';
 import { CreateUser } from '../../../core/models/create-user.interface';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
-import { ConfirmPasswordValidators } from '../../../shared/validators/confirm-password.validator';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NgxMaskDirective } from 'ngx-mask';
@@ -55,11 +53,7 @@ export class FormUserComponent implements OnInit, OnDestroy {
         name: [null, Validators.required],
         email: [null, [Validators.required, Validators.email]],
         phoneNumber: [null, [Validators.required, Validators.minLength(11)]],
-        password: [null, this.data?.userId ? null : [Validators.required, Validators.minLength(6)]],
-        confirmPassword: [null, this.data?.userId ? null : [Validators.required]],
         role:['', Validators.required],
-      }, {
-        validators: ConfirmPasswordValidators.confirmPasswordValidator
       });
       if (this.data?.userId) {
         this.getUser();
@@ -144,16 +138,7 @@ export class FormUserComponent implements OnInit, OnDestroy {
       });
     }
 
-    get isEditing(): boolean {
-      return !!this.data?.userId;
-    }
-    
-    get passwordLabel(): string {
-      return this.isEditing ? 'New Password' : 'Password';
-    }
-    
     private resetForm(){
-      this.userForm.reset({
-      });
+      this.userForm.reset();
     }
 }
