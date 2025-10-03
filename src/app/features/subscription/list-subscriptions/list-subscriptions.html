@@ -86,7 +86,12 @@
                 <td>{{ subscription.subscriptionPlan.name }}</td>
                 <td>{{ subscription.subscriptionPlan.price | currency: 'BRL' }}</td>
                 <td>{{ subscription.startDate | date: 'dd/MM/yyyy'}}</td>
-                <td>{{ subscription.status }}</td>
+                <td>
+                    <nz-tag 
+                        [nzColor]="subscription.status === 'Active' ? 'green' : subscription.status === 'Pending' ? 'orange' : 'red'">
+                        {{ subscription.status }}
+                    </nz-tag>
+                </td>
                 <td>
                     <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Visualizar pagamentos" nzTooltipPlacement="top" class="me-1"
                         nz-button nzType="primary" (click)="openListPayments(subscription.id)">

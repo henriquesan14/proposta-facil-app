@@ -16,18 +16,19 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { SubscriptionPlanService } from '../../../shared/services/subscription-plan.service';
 import { SubscriptionPlan } from '../../../core/models/subscription-plan.interface';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { FormSubscription } from '../form-subscription/form-subscription';
 import { ListPayments } from '../list-payments/list-payments';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 
 @Component({
   selector: 'app-list-subscriptions',
   imports: [BtnNovoComponent, NzFormModule, ReactiveFormsModule, NzInputModule, NzSelectModule, BtnPesquisarComponent, BtnLimparComponent, NzPaginationModule, NzTableModule,
-    DatePipe, CurrencyPipe, NzModalModule, NzButtonModule, NzIconModule, NzTooltipModule, NzDatePickerModule
+    DatePipe, CurrencyPipe, NzModalModule, NzButtonModule, NzIconModule, NzTooltipModule, NzDatePickerModule, NzTagModule, CommonModule
   ],
   templateUrl: './list-subscriptions.html',
   styleUrl: './list-subscriptions.css',

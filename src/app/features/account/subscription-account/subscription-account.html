@@ -44,11 +44,11 @@
         <tbody>
           @for(payment of paymentTable.data; track payment.id) {
             <tr>
-              <td>{{ payment.paidDate | date:'dd/MM/yyyy' }}</td>
+              <td>{{ payment.paymentDate | date:'dd/MM/yyyy' }}</td>
               <td>{{ payment.amount | currency:payment.currency }}</td>
               <td>{{ payment.billingType }}</td>
               <td>
-                @if(payment.paidDate) {
+                @if(payment.paymentDate) {
                   <nz-tag nzColor="green">Pago</nz-tag>
                 } @else {
                   <nz-tag nzColor="orange">Pendente</nz-tag>
