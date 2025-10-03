@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { PaginatedResult } from '../../core/models/paginated-result.interface';
 import { Subscription } from '../../core/models/subscription.interface';
 import { CreateSubscription } from '../../core/models/create-subscription.interface';
+import { Payment } from '../../core/models/payment.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +34,9 @@ export class SubscriptionService {
 
   deleteSubscription(id: string){
     return this.http.delete(`${this.API}/${id}`,);
+  }
+
+  getPayments(id: string){
+    return this.http.get<PaginatedResult<Payment>>(`${this.API}/${id}/payments`);
   }
 }

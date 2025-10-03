@@ -88,6 +88,10 @@
                 <td>{{ subscription.startDate | date: 'dd/MM/yyyy'}}</td>
                 <td>{{ subscription.status }}</td>
                 <td>
+                    <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Visualizar pagamentos" nzTooltipPlacement="top" class="me-1"
+                        nz-button nzType="primary" (click)="openListPayments(subscription.id)">
+                        <span nz-icon nzType="dollar"></span>
+                    </button>
                     <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1"
                         nz-button nzType="primary" (click)="openEditSubscriptionModal(subscription)">
                         <span nz-icon nzType="edit"></span>

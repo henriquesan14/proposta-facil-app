@@ -22,6 +22,7 @@ import { SubscriptionPlanService } from '../../../shared/services/subscription-p
 import { SubscriptionPlan } from '../../../core/models/subscription-plan.interface';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { FormSubscription } from '../form-subscription/form-subscription';
+import { ListPayments } from '../list-payments/list-payments';
 
 @Component({
   selector: 'app-list-subscriptions',
@@ -122,6 +123,24 @@ export class ListSubscriptions implements OnInit, OnDestroy {
     //     this.getTenants();
     //   }
     // });
+  }
+
+  openListPayments(subscriptionId: string){
+    const modal = this.modal.create({
+      nzTitle: 'Pagamentos',
+      nzContent: ListPayments,
+      nzWidth: '800px',
+      nzData: {
+        subscriptionId
+      },
+      nzFooter: null,
+    });
+
+    modal.afterClose.subscribe((result) => {
+      if (result) {
+        this.getSubscriptions();
+      }
+    });
   }
 
   onPageChange(event: number) {

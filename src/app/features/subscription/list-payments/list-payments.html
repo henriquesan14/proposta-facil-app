@@ -1,0 +1,45 @@
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center p-2 mb-2">
+        <nz-pagination nzSize="small" [nzTotal]="paginatedPayment.count"
+            [(nzPageIndex)]="paginatedPayment.pageIndex" [nzPageSize]="paginatedPayment.pageSize"
+            (nzPageIndexChange)="onPageChange($event)" (nzPageSizeChange)="onPageSizeChange($event)"
+            [nzShowSizeChanger]="true" [nzPageSizeOptions]="[2,5,10]" style="max-width: 600px; width: 100%;">
+        </nz-pagination>
+    </div>
+
+    <nz-table [nzData]="paginatedPayment.data" [nzFrontPagination]="false" [nzSize]="'small'" [nzBordered]="true">
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>Valor</th>
+                <th>Tipo Pagamento</th>
+                <th>Data Vencimento</th>
+                <th>Data Pagamento</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for(payment of paginatedPayment.data; track payment.id){
+            <tr>
+                <td>
+                    <nz-tag 
+                        [nzColor]="payment.status === 'RECEIVED' ? 'green' : payment.status === 'PENDING' ? 'orange' : 'red'">
+                        {{ payment.status }}
+                    </nz-tag>
+                </td>
+                <td>{{ payment.amount  | currency: payment.currency }}</td>
+                <td>{{ payment.billingType }}</td>
+                <td>{{ payment.dueDate | date: 'dd/MM/yyyy'}}</td>
+                <td>{{ payment.paymentDate | date: 'dd/MM/yyyy'}}</td>
+                <td>
+                    <button (click)="openPayment(payment.paymentLink)" nz-tooltip nzTooltipTitle="Visualizar" nzTooltipPlacement="top" class="me-1"
+                        nz-button nzType="primary">
+                        <span nz-icon nzType="eye"></span>
+                    </button>
+                </td>
+            </tr>
+            }@empty {}
+        </tbody>
+    </nz-table>
+
+</div>

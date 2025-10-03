@@ -4,7 +4,9 @@ export interface Payment {
   amount: number;
   currency: string;
   billingType: string;
-  paidDate: string;
+  paymentDate: string;
+  dueDate: string;
   paymentAsaasId: string;
   paymentLink: string;
+  status: string;
 }
