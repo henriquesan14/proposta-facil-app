@@ -3,18 +3,18 @@ import { FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Va
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzCardModule } from 'ng-zorro-antd/card';
 import { AuthService } from '../../../shared/services/auth.service';
 import { Credentials } from '../../../core/models/credentials.interface';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { LocalstorageService } from '../../../shared/services/local-storage.service';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+
 
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [NzFormModule, ReactiveFormsModule, NzInputModule, NzButtonModule, NzCardModule, NzIconModule],
+  imports: [NzFormModule, ReactiveFormsModule, NzInputModule, NzButtonModule, NzIconModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

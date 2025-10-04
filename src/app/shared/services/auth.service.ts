@@ -5,6 +5,8 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { User } from '../../core/models/user.interface';
 import { ActivateAccountRequest } from '../../core/models/activate-account-request.interface';
+import { ForgotPasswordRequest } from '../../core/models/forgot-password-request.interface';
+import { ResetPasswordRequest } from '../../core/models/reset-password-request.interface';
 
 
 @Injectable({
@@ -28,5 +30,13 @@ export class AuthService {
 
     activateAccount(activateAccount: ActivateAccountRequest){
       return this.http.post(`${this.API}/activate-account`, activateAccount);
+    }
+
+    forgotPassword(forgotPassword: ForgotPasswordRequest){
+      return this.http.post(`${this.API}/forgot-password`, forgotPassword);
+    }
+
+    resetPassword(resetPassword: ResetPasswordRequest){
+      return this.http.post(`${this.API}/reset-password`, resetPassword);
     }
 }

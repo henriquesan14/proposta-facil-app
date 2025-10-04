@@ -1,29 +1,21 @@
-<div class="login-container">
-  <nz-card class="login-card">
-    <div class="login-header">
-      <img src="/images/icon.png" alt="LoL Logo" class="lol-icon" />
-      <h2 class="login-title">Proposta Fácil</h2>
-      <h3 class="login-subtitle">Insira suas credenciais:</h3>
-    </div>
-
-    <!-- Formulário de login -->
-    <form nz-form [formGroup]="loginForm" class="login-form" (submit)="onSubmit()">
-      <nz-form-item>
-        <nz-form-control nzErrorTip="Please input your email!">
-          <nz-input-group nzPrefixIcon="user">
-            <input autocomplete="email" type="email" nz-input formControlName="email" placeholder="Email" />
-          </nz-input-group>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-control nzErrorTip="Please input your Password!">
-          <nz-input-group nzPrefixIcon="lock">
-            <input autocomplete="current-password" type="password" nz-input formControlName="password" placeholder="Password" />
-          </nz-input-group>
-        </nz-form-control>
-      </nz-form-item>
-      <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'" [nzLoading]="loading">Entrar</button>
-      <a nz-button class="login-form-button" nzType="link">Esqueceu sua senha?</a>
-    </form>
-  </nz-card>
-</div>
+<h3 class="login-subtitle">Insira suas credenciais:</h3>
+<form nz-form [formGroup]="loginForm" class="login-form" (submit)="onSubmit()">
+  <nz-form-item>
+    <nz-form-control nzErrorTip="Please input your email!">
+      <nz-input-group nzPrefixIcon="user">
+        <input type="email" nz-input formControlName="email" placeholder="Email" maxlength="100" />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control nzErrorTip="Please input your Password!">
+      <nz-input-group nzPrefixIcon="lock">
+        <input autocomplete="current-password" type="password" nz-input formControlName="password"
+          placeholder="Password" />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'"
+    [nzLoading]="loading">Entrar</button>
+  <a routerLink="/forgot-password" nz-button class="login-form-button" nzType="link">Esqueceu sua senha?</a>
+</form>

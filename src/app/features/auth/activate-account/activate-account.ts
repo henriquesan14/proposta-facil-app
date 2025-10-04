@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -13,7 +12,7 @@ import { ActivateAccountRequest } from '../../../core/models/activate-account-re
 
 @Component({
   selector: 'app-activate-account',
-  imports: [NzFormModule, ReactiveFormsModule, NzInputModule, NzButtonModule, NzCardModule, NzIconModule, NzInputModule],
+  imports: [NzFormModule, ReactiveFormsModule, NzInputModule, NzButtonModule, NzIconModule, NzInputModule],
   templateUrl: './activate-account.html',
   styleUrl: './activate-account.css'
 })
