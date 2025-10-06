@@ -157,7 +157,7 @@ export class ListSubscriptions implements OnInit, OnDestroy {
   showConfirm(id: string): void {
     this.confirmModal = this.modal.confirm({
       nzTitle: 'Exclusão',
-      nzContent: 'Tem certeza que quer remover este tenant?',
+      nzContent: 'Tem certeza que quer remover esta assinatura?',
       nzOnOk: () =>
         this.subscriptionService.deleteSubscription(id).subscribe({
           next: () => {
