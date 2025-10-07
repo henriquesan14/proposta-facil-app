@@ -5,4 +5,6 @@ export interface User {
     phoneNumber: string
     role: string
     disabled: boolean
+    isActive: boolean
+    createdAt: string
 }

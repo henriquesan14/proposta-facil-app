@@ -19,12 +19,15 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { BtnNovoComponent } from '../../../shared/components/btn-novo/btn-novo.component';
 import { PhonePipe } from '../../../shared/pipes/phone-pipe.pipe';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { UserView } from '../user-view/user-view';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { TagAtivo } from '../../../shared/components/tag-ativo-inativo/tag-ativo';
 
 @Component({
   selector: 'app-list-users',
   standalone: true,
   imports: [NzTableModule, NzButtonModule, NzIconModule, NzModalModule, NzTooltipModule, ReactiveFormsModule, NzFormModule, NzPaginationModule, BtnPesquisarComponent, BtnLimparComponent, NzInputModule, BtnNovoComponent,
-    PhonePipe, NzSelectModule
+    PhonePipe, NzSelectModule, NzSwitchModule, TagAtivo
   ],
   templateUrl: './list-users.component.html',
   styleUrl: './list-users.component.css'
@@ -37,7 +40,8 @@ export class ListUsersComponent implements OnInit, OnDestroy {
     constructor(private userService: UserService, private formBuilder: FormBuilder){
       this.filtroForm = this.formBuilder.group({
         nameFilter: [null],
-        role: ['']
+        role: [''],
+        onlyActive: [true]
       });
     }
     filtroForm!: FormGroup;
@@ -64,7 +68,8 @@ export class ListUsersComponent implements OnInit, OnDestroy {
         pageIndex: this.paginatedUsers.pageIndex,
         pageSize: this.paginatedUsers.pageSize,
         name: this.filtroForm.get('nameFilter')?.value,
-        role: this.filtroForm.get('role')?.value
+        role: this.filtroForm.get('role')?.value,
+        onlyActive: this.filtroForm.get('onlyActive')?.value
       };
       this.isLoading = true;
       this.userService.getUsers(params)
@@ -115,6 +120,19 @@ export class ListUsersComponent implements OnInit, OnDestroy {
       });
     }
 
+    openViewUserModal(userId: string): void {
+      this.modal.create({
+        nzTitle: 'Detalhes do usuário',
+        nzContent: UserView,
+        nzWidth: '800px',
+        nzData:{
+          userId
+        },
+        nzFooter: null
+      });
+      
+    }
+
     onPageChange(event: number){
       this.paginatedUsers.pageIndex = event;
       this.getUsers();
@@ -128,11 +146,11 @@ export class ListUsersComponent implements OnInit, OnDestroy {
     showConfirm(id: string): void {
       this.confirmModal = this.modal.confirm({
         nzTitle: 'Exclusão',
-        nzContent: 'Tem certeza que quer remover este usuário?',
+        nzContent: 'Tem certeza que quer <strong>DESATIVAR</strong> este usuário?',
         nzOnOk: () =>
           this.userService.deleteUser(id).subscribe({
             next: () => {
-              this.toastr.success('Usuário removido!', 'Sucesso');
+              this.toastr.success('Usuário desativado!', 'Sucesso');
               this.getUsers();
             }
           })
@@ -140,7 +158,9 @@ export class ListUsersComponent implements OnInit, OnDestroy {
     }
 
     limpar(){
-      this.filtroForm.reset();
+      this.filtroForm.reset({
+        onlyActive: true
+      });
       this.filtroForm.get('role')?.setValue('');
     }
 }

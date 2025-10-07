@@ -28,6 +28,15 @@
           </nz-form-control>
         </nz-form-item>
       </div>
+
+      <div nz-col [nzSpan]="4">
+                <nz-form-item>
+                    <nz-form-label>Somente ativos</nz-form-label>
+                    <nz-form-control>
+                    <nz-switch formControlName="onlyActive"></nz-switch>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
     </div>
     <div nz-row class="mt-2 mb-2">
       <div nz-col [nzXs]="24" [nzMd]="12">
@@ -52,6 +61,7 @@
         <th>Email</th>
         <th>Telefone</th>
         <th>Role</th>
+        <th>Ativo</th>
         <th>Ações</th>
       </tr>
     </thead>
@@ -63,13 +73,20 @@
         <td>{{ user.phoneNumber | phone }}</td>
         <td>{{ user.role }}</td>
         <td>
-          <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1" nz-button
+          <tag-ativo [status]="user.isActive"></tag-ativo>
+        </td>
+        <td>
+          <button  nz-tooltip nzTooltipTitle="Visualizar" nzTooltipPlacement="top" class="me-1" nz-button
+            nzType="primary" (click)="openViewUserModal(user.id)">
+            <span nz-icon nzType="eye"></span>
+          </button>
+          <button nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1" nz-button
             nzType="primary" (click)="openEditUserModal(user.id)">
             <span nz-icon nzType="edit"></span>
           </button>
-          <button hasRole="DELETE_USER" nz-tooltip nzTooltipTitle="Excluir" nzTooltipPlacement="top" nz-button
+          <button nz-tooltip nzTooltipTitle="Desativar" nzTooltipPlacement="top" nz-button
             nzType="primary" (click)="showConfirm(user.id)" nzDanger>
-            <span nz-icon nzType="delete"></span>
+            <span nz-icon nzType="pause-circle"></span>
           </button>
         </td>
       </tr>

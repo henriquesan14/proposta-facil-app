@@ -1,0 +1,17 @@
+@if (user) {
+  <div class="p-6 max-w-3xl mx-auto bg-white rounded-2xl shadow">
+    <nz-descriptions nzSize="middle" nzBordered [nzColumn]="2">
+      <nz-descriptions-item nzTitle="Nome">{{ user.name }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Email">{{ user.email }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Telefone">{{ user.phoneNumber | phone }}</nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Data de Criação">
+        {{ user.createdAt | date:'dd/MM/yyyy HH:mm' }}
+      </nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Ativo">
+        <tag-ativo [status]="user.isActive"></tag-ativo>
+      </nz-descriptions-item>
+    </nz-descriptions>
+  </div>
+}
