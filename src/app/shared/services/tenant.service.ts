@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { User } from '../../core/models/user.interface';
 import { Observable } from 'rxjs';
 import { PaginatedResult } from '../../core/models/paginated-result.interface';
 import { Tenant } from '../../core/models/tenant.interface';
@@ -24,8 +23,8 @@ export class TenantService {
     return this.http.get<PaginatedResult<Tenant>>(`${this.API}/`, {params});
   }
 
-  getTenantById(id: string): Observable<User>{
-    return this.http.get<User>(`${this.API}/${id}`);
+  getTenantById(id: string): Observable<Tenant>{
+    return this.http.get<Tenant>(`${this.API}/${id}`);
   }
 
   createTenant(tenant: Tenant): Observable<Tenant>{

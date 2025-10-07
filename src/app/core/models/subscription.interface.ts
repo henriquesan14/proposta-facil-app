@@ -14,4 +14,6 @@ export interface Subscription {
   paymentLink: string;
   payments: Payment[];
   tenant: Tenant;
+  isActive: boolean;
+  createdAt: string
 }

@@ -23,6 +23,10 @@ export class SubscriptionService {
     }
     return this.http.get<PaginatedResult<Subscription>>(`${this.API}/`, {params});
   }
+
+  getSubscriptionById(id: string): Observable<Subscription>{
+    return this.http.get<Subscription>(`${this.API}/${id}`);
+  }
   
   createSubscription(createSubscription: CreateSubscription){
     return this.http.post(`${this.API}`, createSubscription);

@@ -1,7 +1,7 @@
 <div class="container">
     <div style="display: flex;">
         <h2 nz-title class="text-center me-2">Tenants</h2>
-        <btn-novo title="Novo tenant" (clickEvent)="openNewClientModal()">
+        <btn-novo title="Novo tenant" (clickEvent)="openNewTenantModal()">
         </btn-novo>
     </div>
 
@@ -20,6 +20,15 @@
                     <nz-form-label for="document">CPF/CNPJ</nz-form-label>
                     <nz-form-control>
                         <input [mask]="mask" formControlName="document" id="document" placeholder="CPF/CNPJ" nz-input />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="4">
+                <nz-form-item>
+                    <nz-form-label>Somente ativos</nz-form-label>
+                    <nz-form-control>
+                    <nz-switch formControlName="onlyActive"></nz-switch>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -47,29 +56,36 @@
                 <th>Email</th>
                 <th>Telefone</th>
                 <th>CPF/CNPJ</th>
+                <th>Ativo</th>
                 <th>Ações</th>
             </tr>
         </thead>
         <tbody>
-            @for(client of paginatedTenants.data; track client.id){
+            @for(tenant of paginatedTenants.data; track tenant.id){
             <tr>
-                <td>{{ client.name }}</td>
-                <td>{{ client.email }}</td>
-                <td>{{ client.phoneNumber | phone }}</td>
-                <td>{{ client.document | cpfCnpj }}</td>
+                <td>{{ tenant.name }}</td>
+                <td>{{ tenant.email }}</td>
+                <td>{{ tenant.phoneNumber | phone }}</td>
+                <td>{{ tenant.document | cpfCnpj }}</td>
+                <td>
+                    <tag-ativo [status]="tenant.isActive"></tag-ativo>
+                </td>
                 <td>
                     <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Visualizar" nzTooltipPlacement="top" class="me-1"
-                        nz-button nzType="primary" (click)="openEditClientModal(client)">
+                        nz-button nzType="primary" (click)="openViewTenantModal(tenant.id)">
                         <span nz-icon nzType="eye"></span>
                     </button>
-                    <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1"
-                        nz-button nzType="primary" (click)="openEditClientModal(client)">
-                        <span nz-icon nzType="edit"></span>
-                    </button>
-                    <button hasRole="DELETE_USER" nz-tooltip nzTooltipTitle="Excluir" nzTooltipPlacement="top" nz-button
-                        nzType="primary" (click)="showConfirm(client.id)" nzDanger>
-                        <span nz-icon nzType="delete"></span>
-                    </button>
+                    @if(tenant.isActive){
+                        <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1"
+                            nz-button nzType="primary" (click)="openEditTenantModal(tenant)">
+                            <span nz-icon nzType="edit"></span>
+                        </button>
+                        <button nzDanger nz-tooltip nzTooltipTitle="Desativar" nzTooltipPlacement="top" nz-button
+                            nzType="primary" (click)="showConfirm(tenant)" nzDanger>
+                            <span nz-icon nzType="pause-circle"></span>
+                        </button>
+                    }
+                    
                 </td>
             </tr>
             }@empty {}

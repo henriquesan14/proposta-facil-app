@@ -20,11 +20,14 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 import { FormTenant } from '../form-tenant/form-tenant';
+import { TagAtivo } from '../../../shared/components/tag-ativo-inativo/tag-ativo';
+import { TenantView } from '../tenant-view/tenant-view';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
 
 @Component({
   selector: 'app-list-tenants',
   imports: [BtnNovoComponent, NzFormModule, ReactiveFormsModule, NzInputModule, NgxMaskDirective, BtnPesquisarComponent, BtnLimparComponent, NzPaginationModule, NzTableModule,
-    PhonePipe, CpfCnpjPipe, NzModalModule, NzButtonModule, NzIconModule, NzTooltipModule
+    PhonePipe, CpfCnpjPipe, NzModalModule, NzButtonModule, NzIconModule, NzTooltipModule, TagAtivo, NzSwitchModule
   ],
   templateUrl: './list-tenants.html',
   styleUrl: './list-tenants.css'
@@ -37,7 +40,8 @@ export class ListTenants implements OnInit, OnDestroy {
   constructor(private tenantService: TenantService, private formBuilder: FormBuilder) {
     this.filtroForm = this.formBuilder.group({
       nameFilter: [null],
-      document: ['']
+      document: [''],
+      onlyActive: [true]
     });
 
     this.filtroForm.get('document')?.valueChanges.subscribe(value => {
@@ -64,7 +68,8 @@ export class ListTenants implements OnInit, OnDestroy {
       pageIndex: this.paginatedTenants.pageIndex,
       pageSize: this.paginatedTenants.pageSize,
       name: this.filtroForm.get('nameFilter')?.value,
-      document: this.filtroForm.get('document')?.value
+      document: this.filtroForm.get('document')?.value,
+      onlyActive: this.filtroForm.get('onlyActive')?.value,
     };
     this.isLoading = true;
     this.tenantService.getTenants(params)
@@ -90,7 +95,7 @@ export class ListTenants implements OnInit, OnDestroy {
     }
   }
 
-  openNewClientModal(): void {
+  openNewTenantModal(): void {
     const modal = this.modal.create({
       nzTitle: 'Cadastrar tenant',
       nzContent: FormTenant,
@@ -105,7 +110,7 @@ export class ListTenants implements OnInit, OnDestroy {
     });
   }
 
-  openEditClientModal(tenant: Tenant): void {
+  openEditTenantModal(tenant: Tenant): void {
     const modal = this.modal.create({
       nzTitle: 'Editar tenant',
       nzContent: FormTenant,
@@ -123,6 +128,18 @@ export class ListTenants implements OnInit, OnDestroy {
     });
   }
 
+  openViewTenantModal(tenantId: string): void {
+    this.modal.create({
+      nzTitle: 'Detalhes do tenant',
+      nzContent: TenantView,
+      nzWidth: '800px',
+      nzData: {
+        tenantId
+      },
+      nzFooter: null
+    });
+  }
+
   onPageChange(event: number) {
     this.paginatedTenants.pageIndex = event;
     this.getTenants();
@@ -133,14 +150,14 @@ export class ListTenants implements OnInit, OnDestroy {
     this.getTenants();
   }
 
-  showConfirm(id: string): void {
+  showConfirm(tenant: Tenant): void {
     this.confirmModal = this.modal.confirm({
       nzTitle: 'Exclusão',
-      nzContent: 'Tem certeza que quer remover este tenant?',
+      nzContent: `Tem certeza que quer <strong>DESATIVAR</strong> esse tenant?`,
       nzOnOk: () =>
-        this.tenantService.deleteTenant(id).subscribe({
+        this.tenantService.deleteTenant(tenant.id).subscribe({
           next: () => {
-            this.toastr.success('Tenant removido!', 'Sucesso');
+            this.toastr.success('Tenant desativado!', 'Sucesso');
             this.getTenants();
           }
         })
@@ -148,6 +165,8 @@ export class ListTenants implements OnInit, OnDestroy {
   }
 
   limpar() {
-    this.filtroForm.reset();
+    this.filtroForm.reset({
+      onlyActive: true
+    });
   }
 }

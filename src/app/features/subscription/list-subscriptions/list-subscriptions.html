@@ -7,7 +7,7 @@
 
     <form nz-form [formGroup]="filtroForm" (ngSubmit)="getSubscriptions()" nzLayout="vertical">
         <div nz-row [nzGutter]="12">
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="4">
                 <nz-form-item>
                     <nz-form-label for="tenantFilter">Tenant</nz-form-label>
                     <nz-form-control>
@@ -15,7 +15,7 @@
                     </nz-form-control>
                 </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="4">
                 <nz-form-item>
                     <nz-form-label for="planFilter">Plano</nz-form-label>
                     <nz-form-control>
@@ -28,7 +28,7 @@
                     </nz-form-control>
                 </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="4">
                 <nz-form-item>
                     <nz-form-label for="statusFilter">Status</nz-form-label>
                     <nz-form-control>
@@ -42,12 +42,21 @@
                 </nz-form-item>
             </div>
 
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="4">
                 <nz-form-item>
                     <nz-form-label for="dateRange">Data Inicio</nz-form-label>
                     <nz-form-control>
                         <nz-range-picker class="me-1" formControlName="dateRange" nzFormat="dd/MM/yyyy">
                         </nz-range-picker>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="4">
+                <nz-form-item>
+                    <nz-form-label>Somente ativos</nz-form-label>
+                    <nz-form-control>
+                        <nz-switch formControlName="onlyActive"></nz-switch>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -76,6 +85,7 @@
                 <th>Valor Plano</th>
                 <th>Data Inicio</th>
                 <th>Status</th>
+                <th>Ativo</th>
                 <th>Ações</th>
             </tr>
         </thead>
@@ -87,24 +97,35 @@
                 <td>{{ subscription.subscriptionPlan.price | currency: 'BRL' }}</td>
                 <td>{{ subscription.startDate | date: 'dd/MM/yyyy'}}</td>
                 <td>
-                    <nz-tag 
+                    <nz-tag
                         [nzColor]="subscription.status === 'Active' ? 'green' : subscription.status === 'Pending' ? 'orange' : 'red'">
                         {{ subscription.status }}
                     </nz-tag>
                 </td>
                 <td>
-                    <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Visualizar pagamentos" nzTooltipPlacement="top" class="me-1"
+                    <tag-ativo [status]="subscription.isActive"></tag-ativo>
+                </td>
+                <td>
+                    <button nz-tooltip nzTooltipTitle="Visualizar" nzTooltipPlacement="top" class="me-1" nz-button
+                        nzType="primary" (click)="openViewSubscriptionModal(subscription.id)">
+                        <span nz-icon nzType="eye"></span>
+                    </button>
+                    <button nz-tooltip nzTooltipTitle="Visualizar pagamentos" nzTooltipPlacement="top" class="me-1"
                         nz-button nzType="primary" (click)="openListPayments(subscription.id)">
                         <span nz-icon nzType="dollar"></span>
                     </button>
-                    <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1"
-                        nz-button nzType="primary" (click)="openEditSubscriptionModal(subscription)">
+                    @if(subscription.isActive){
+                    <button nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1" nz-button
+                        nzType="primary" (click)="openEditSubscriptionModal(subscription)">
                         <span nz-icon nzType="edit"></span>
                     </button>
-                    <button hasRole="DELETE_USER" nz-tooltip nzTooltipTitle="Excluir" nzTooltipPlacement="top" nz-button
-                        nzType="primary" (click)="showConfirm(subscription.id)" nzDanger>
-                        <span nz-icon nzType="delete"></span>
+                    <button nz-tooltip
+                        nzTooltipTitle="Desativar" nzTooltipPlacement="top"
+                        nz-button nzType="primary" (click)="showConfirm(subscription)" nzDanger>
+                        <span nz-icon nzType="pause-circle"></span>
                     </button>
+                    }
+
                 </td>
             </tr>
             }@empty {}

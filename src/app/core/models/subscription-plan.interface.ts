@@ -4,4 +4,6 @@ export interface SubscriptionPlan {
     maxProposalsPerMonth: number;
     price: number;
     description: string;
+    isActive: boolean;
+    createdAt: string;
 }

@@ -9,4 +9,5 @@ export interface Payment {
   paymentAsaasId: string;
   paymentLink: string;
   status: string;
+  isActive: boolean;
 }

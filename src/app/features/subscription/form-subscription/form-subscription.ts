@@ -138,7 +138,6 @@ export class FormSubscription implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    console.log(this.formSubscription)
     if (this.formSubscription.valid) {
       const form = this.formSubscription.value;
       const proposal = <CreateSubscription>{

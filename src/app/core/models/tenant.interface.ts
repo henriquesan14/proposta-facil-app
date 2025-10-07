@@ -13,4 +13,6 @@ export interface Tenant {
   addressState: string
   addressZipCode: string
   asaasId: string
+  isActive: boolean
+  createdAt: string
 }

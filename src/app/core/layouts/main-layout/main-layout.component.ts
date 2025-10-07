@@ -84,7 +84,6 @@ export class MainLayoutComponent {
   }
 
   subscriptionAccount(){
-    console.log('foi')
     this.router.navigateByUrl('/account/subscription');
   }
 

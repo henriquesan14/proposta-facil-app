@@ -11,10 +11,11 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
+import { TagAtivo } from '../../../shared/components/tag-ativo-inativo/tag-ativo';
 
 @Component({
   selector: 'app-list-payments',
-  imports: [NzPaginationModule, NzTableModule, CurrencyPipe, DatePipe, NzTagModule, CommonModule, NzButtonModule, NzIconModule, NzTooltipModule],
+  imports: [NzPaginationModule, NzTableModule, CurrencyPipe, DatePipe, NzTagModule, CommonModule, NzButtonModule, NzIconModule, NzTooltipModule, TagAtivo],
   templateUrl: './list-payments.html',
   styleUrl: './list-payments.css'
 })

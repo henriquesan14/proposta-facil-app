@@ -24,11 +24,14 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { FormSubscription } from '../form-subscription/form-subscription';
 import { ListPayments } from '../list-payments/list-payments';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { TagAtivo } from '../../../shared/components/tag-ativo-inativo/tag-ativo';
+import { SubscriptionView } from '../subscription-view/subscription-view';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
 
 @Component({
   selector: 'app-list-subscriptions',
   imports: [BtnNovoComponent, NzFormModule, ReactiveFormsModule, NzInputModule, NzSelectModule, BtnPesquisarComponent, BtnLimparComponent, NzPaginationModule, NzTableModule,
-    DatePipe, CurrencyPipe, NzModalModule, NzButtonModule, NzIconModule, NzTooltipModule, NzDatePickerModule, NzTagModule, CommonModule
+    DatePipe, CurrencyPipe, NzModalModule, NzButtonModule, NzIconModule, NzTooltipModule, NzDatePickerModule, NzTagModule, CommonModule, TagAtivo, NzSwitchModule
   ],
   templateUrl: './list-subscriptions.html',
   styleUrl: './list-subscriptions.css',
@@ -44,7 +47,8 @@ export class ListSubscriptions implements OnInit, OnDestroy {
       tenantFilter: [null],
       planFilter: [''],
       statusFilter: [''],
-      dateRange: [null]
+      dateRange: [null],
+      onlyActive: [true]
     });
   }
   filtroForm!: FormGroup;
@@ -82,7 +86,8 @@ export class ListSubscriptions implements OnInit, OnDestroy {
       subscriptionPlanId: this.filtroForm.get('planFilter')?.value,
       status: this.filtroForm.get('statusFilter')?.value,
       startDate: dateRange ? this.datePipe.transform((dateRange as Date[])[0], "yyyy-MM-dd") : null,
-      endDate: dateRange ? this.datePipe.transform((dateRange as Date[])[1], "yyyy-MM-dd") : null
+      endDate: dateRange ? this.datePipe.transform((dateRange as Date[])[1], "yyyy-MM-dd") : null,
+      onlyActive: this.filtroForm.get('onlyActive')?.value,
     };
     this.subscriptionService.getSubscriptions(params)
       .pipe(takeUntil(this.destroy$))
@@ -126,6 +131,18 @@ export class ListSubscriptions implements OnInit, OnDestroy {
     // });
   }
 
+  openViewSubscriptionModal(subscriptionId: string): void {
+    this.modal.create({
+      nzTitle: 'Detalhes assinatura',
+      nzContent: SubscriptionView,
+      nzWidth: '800px',
+      nzData: {
+        subscriptionId
+      },
+      nzFooter: null,
+    });
+  }
+
   openListPayments(subscriptionId: string){
     const modal = this.modal.create({
       nzTitle: 'Pagamentos',
@@ -154,14 +171,14 @@ export class ListSubscriptions implements OnInit, OnDestroy {
     this.getSubscriptions();
   }
 
-  showConfirm(id: string): void {
+  showConfirm(subscription: Subscription): void {
     this.confirmModal = this.modal.confirm({
       nzTitle: 'Exclusão',
-      nzContent: 'Tem certeza que quer remover esta assinatura?',
+      nzContent: 'Tem certeza que quer <strong>DESATIVAR</strong> esta assinatura?',
       nzOnOk: () =>
-        this.subscriptionService.deleteSubscription(id).subscribe({
+        this.subscriptionService.deleteSubscription(subscription.id).subscribe({
           next: () => {
-            this.toastr.success('Assinatura removida!', 'Sucesso');
+            this.toastr.success('Assinatura desativada!', 'Sucesso');
             this.getSubscriptions();
           }
         })
@@ -169,7 +186,9 @@ export class ListSubscriptions implements OnInit, OnDestroy {
   }
 
   limpar() {
-    this.filtroForm.reset();
+    this.filtroForm.reset({
+      onlyActive: true
+    });
     this.filtroForm.get('planFilter')?.setValue('');
     this.filtroForm.get('statusFilter')?.setValue('');
   }

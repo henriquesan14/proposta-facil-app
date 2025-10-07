@@ -1,0 +1,24 @@
+@if (subscription) {
+  <div class="p-6 max-w-3xl mx-auto bg-white rounded-2xl shadow">
+    <nz-descriptions nzSize="middle" nzBordered [nzColumn]="2">
+      <nz-descriptions-item nzTitle="Nome">{{ subscription.tenant.name }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Plano">{{ subscription.subscriptionPlan.name }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Data de Inicio">{{ subscription.startDate | date: 'dd/MM/yyyy' }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Status">
+        <nz-tag 
+            [nzColor]="subscription.status === 'Active' ? 'green' : subscription.status === 'Pending' ? 'orange' : 'red'">
+            {{ subscription.status }}
+        </nz-tag>
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Qtd. propostas usadas">{{ subscription.proposalsUsed }}</nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Data de Criação">
+        {{ subscription.createdAt | date:'dd/MM/yyyy HH:mm' }}
+      </nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Ativo">
+        <tag-ativo [status]="subscription.isActive"></tag-ativo>
+      </nz-descriptions-item>
+    </nz-descriptions>
+  </div>
+}

@@ -15,7 +15,14 @@
                     </nz-form-control>
                 </nz-form-item>
             </div>
-    
+            <div nz-col [nzSpan]="4">
+                <nz-form-item>
+                    <nz-form-label>Somente ativos</nz-form-label>
+                    <nz-form-control>
+                        <nz-switch formControlName="onlyActive"></nz-switch>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
         </div>
         <div nz-row class="mt-2 mb-2">
             <div nz-col [nzXs]="24" [nzMd]="12">
@@ -32,6 +39,7 @@
                 <th>Valor</th>
                 <th>Qtd. Propostas</th>
                 <th>Descrição</th>
+                <th>Ativo</th>
                 <th>Ações</th>
             </tr>
         </thead>
@@ -43,14 +51,20 @@
                 <td>{{ subscriptionPlan.maxProposalsPerMonth}}</td>
                 <td>{{ subscriptionPlan.description }}</td>
                 <td>
+                    <tag-ativo [status]="subscriptionPlan.isActive"></tag-ativo>
+                </td>
+                <td>
                     <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1"
                         nz-button nzType="primary" (click)="openEditSubscriptionModal(subscriptionPlan)">
                         <span nz-icon nzType="edit"></span>
                     </button>
-                    <button hasRole="DELETE_USER" nz-tooltip nzTooltipTitle="Excluir" nzTooltipPlacement="top" nz-button
-                        nzType="primary" (click)="showConfirm(subscriptionPlan.id)" nzDanger>
-                        <span nz-icon nzType="delete"></span>
-                    </button>
+                    @if(subscriptionPlan.isActive){
+                        <button nz-tooltip
+                            nzTooltipTitle="Desativar" nzTooltipPlacement="top"
+                            nz-button nzType="primary" (click)="showConfirm(subscriptionPlan)" nzDanger>
+                            <span nz-icon nzType="pause-circle"></span>
+                        </button>
+                    }
                 </td>
             </tr>
             }@empty {}

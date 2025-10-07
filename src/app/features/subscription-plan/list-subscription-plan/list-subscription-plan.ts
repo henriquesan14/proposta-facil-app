@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { NzModalModule, NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { ToastrService } from 'ngx-toastr';
-import { Subject, Subscription, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { SubscriptionPlanService } from '../../../shared/services/subscription-plan.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SubscriptionPlan } from '../../../core/models/subscription-plan.interface';
@@ -15,11 +15,14 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { FormSubscriptionPlan } from '../form-subscription-plan/form-subscription-plan';
+import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
+import { TagAtivo } from '../../../shared/components/tag-ativo-inativo/tag-ativo';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
 
 @Component({
   selector: 'app-list-subscription-plan',
   imports: [BtnNovoComponent, BtnLimparComponent, BtnPesquisarComponent,  ReactiveFormsModule, NzFormModule, NzTableModule, CurrencyPipe, NzButtonModule, NzIconModule, NzModalModule,
-    NzInputModule
+    NzInputModule, NzTooltipModule, TagAtivo, NzSwitchModule
   ],
   templateUrl: './list-subscription-plan.html',
   styleUrl: './list-subscription-plan.css'
@@ -32,6 +35,7 @@ export class ListSubscriptionPlan implements OnInit, OnDestroy {
   constructor(private subscriptionPlanService: SubscriptionPlanService, private formBuilder: FormBuilder) {
     this.filtroForm = this.formBuilder.group({
       nameFilter: [null],
+      onlyActive: [true]
     });
   }
   filtroForm!: FormGroup;
@@ -48,7 +52,8 @@ export class ListSubscriptionPlan implements OnInit, OnDestroy {
 
   getSubscriptionPlans(){
     const params = {
-      name: this.filtroForm.get('nameFilter')?.value
+      name: this.filtroForm.get('nameFilter')?.value,
+      onlyActive: this.filtroForm.get('onlyActive')?.value
     };
     this.subscriptionPlanService.getSubscriptionPlans(params)
       .pipe(takeUntil(this.destroy$))
@@ -92,21 +97,23 @@ export class ListSubscriptionPlan implements OnInit, OnDestroy {
     // });
   }
 
-  showConfirm(id: string): void {
-    this.confirmModal = this.modal.confirm({
-      nzTitle: 'Exclusão',
-      nzContent: 'Tem certeza que quer remover este plano?',
-      nzOnOk: () =>
-        this.subscriptionPlanService.deleteSubscriptionPlan(id).subscribe({
-          next: () => {
-            this.toastr.success('Assinatura removida!', 'Sucesso');
-            this.getSubscriptionPlans();
-          }
-        })
-    });
-  }
+  showConfirm(subscriptionPlan: SubscriptionPlan): void {
+      this.confirmModal = this.modal.confirm({
+        nzTitle: 'Exclusão',
+        nzContent: 'Tem certeza que quer <strong>DESATIVAR</strong> este plano?',
+        nzOnOk: () =>
+          this.subscriptionPlanService.deleteSubscriptionPlan(subscriptionPlan.id).subscribe({
+            next: () => {
+              this.toastr.success('Plano desativado!', 'Sucesso');
+              this.getSubscriptionPlans();
+            }
+          })
+      });
+    }
 
   limpar() {
-    this.filtroForm.reset();
+    this.filtroForm.reset({
+      onlyActive: true
+    });
   }
 }
