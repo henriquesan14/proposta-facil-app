@@ -54,16 +54,15 @@
                     <tag-ativo [status]="subscriptionPlan.isActive"></tag-ativo>
                 </td>
                 <td>
+                    @if(subscriptionPlan.isActive){
                     <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1"
                         nz-button nzType="primary" (click)="openEditSubscriptionModal(subscriptionPlan)">
                         <span nz-icon nzType="edit"></span>
                     </button>
-                    @if(subscriptionPlan.isActive){
-                        <button nz-tooltip
-                            nzTooltipTitle="Desativar" nzTooltipPlacement="top"
-                            nz-button nzType="primary" (click)="showConfirm(subscriptionPlan)" nzDanger>
-                            <span nz-icon nzType="pause-circle"></span>
-                        </button>
+                    <button nz-tooltip nzTooltipTitle="Desativar" nzTooltipPlacement="top" nz-button nzType="primary"
+                        (click)="showConfirm(subscriptionPlan)" nzDanger>
+                        <span nz-icon nzType="pause-circle"></span>
+                    </button>
                     }
                 </td>
             </tr>

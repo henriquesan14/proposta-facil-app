@@ -20,12 +20,15 @@ import { CpfCnpjPipe } from '../../../shared/pipes/cpf-cnpj.pipe';
 import { PhonePipe } from '../../../shared/pipes/phone-pipe.pipe';
 import { NgxMaskDirective } from 'ngx-mask';
 import { FormClient } from '../form-client/form-client';
+import { TagAtivo } from '../../../shared/components/tag-ativo-inativo/tag-ativo';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { ClientView } from '../client-view/client-view';
 
 @Component({
   selector: 'app-list-client',
   standalone: true,
   imports: [BtnNovoComponent, BtnPesquisarComponent, BtnLimparComponent, ReactiveFormsModule, NzFormModule, NzInputModule, NzPaginationModule, NzTableModule, NzIconModule, NzModalModule, NzButtonModule,
-    NzTooltipModule, CpfCnpjPipe, PhonePipe, NgxMaskDirective
+    NzTooltipModule, CpfCnpjPipe, PhonePipe, NgxMaskDirective, TagAtivo, NzSwitchModule
    ],
   templateUrl: './list-client.html',
   styleUrl: './list-client.css'
@@ -38,7 +41,8 @@ export class ListClient implements OnInit, OnDestroy {
     constructor(private clientService: ClientService, private formBuilder: FormBuilder){
       this.filtroForm = this.formBuilder.group({
         nameFilter: [null],
-        document: ['']
+        document: [''],
+        onlyActive: [true]
       });
 
       this.filtroForm.get('document')?.valueChanges.subscribe(value => {
@@ -63,7 +67,8 @@ export class ListClient implements OnInit, OnDestroy {
         pageIndex: this.paginatedClients.pageIndex,
         pageSize: this.paginatedClients.pageSize,
         name: this.filtroForm.get('nameFilter')?.value,
-        document: this.filtroForm.get('document')?.value
+        document: this.filtroForm.get('document')?.value,
+        onlyActive: this.filtroForm.get('onlyActive')?.value
       };
       this.clientService.getClients(params)
         .pipe(takeUntil(this.destroy$))
@@ -115,6 +120,18 @@ export class ListClient implements OnInit, OnDestroy {
       // });
     }
 
+    openViewClientModal(clientId: string): void {
+      this.modal.create({
+        nzTitle: 'Detalhes do cliente',
+        nzContent: ClientView,
+        nzWidth: '800px',
+        nzData: {
+          clientId
+        },
+        nzFooter: null,
+      });
+    }
+
     onPageChange(event: number){
       this.paginatedClients.pageIndex = event;
       this.getClients();
@@ -128,11 +145,11 @@ export class ListClient implements OnInit, OnDestroy {
     showConfirm(id: string): void {
       this.confirmModal = this.modal.confirm({
         nzTitle: 'Exclusão',
-        nzContent: 'Tem certeza que quer remover este cliente?',
+        nzContent: 'Tem certeza que quer <strong>DESATIVAR</strong> este cliente?',
         nzOnOk: () =>
           this.clientService.deleteClient(id).subscribe({
             next: () => {
-              this.toastr.success('Cliente removido!', 'Sucesso');
+              this.toastr.success('Cliente desativado!', 'Sucesso');
               this.getClients();
             }
           })
@@ -140,6 +157,8 @@ export class ListClient implements OnInit, OnDestroy {
     }
 
     limpar(){
-      this.filtroForm.reset();
+      this.filtroForm.reset({
+        onlyActive: true
+      });
     }
 }

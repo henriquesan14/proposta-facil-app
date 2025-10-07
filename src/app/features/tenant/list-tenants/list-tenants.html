@@ -71,11 +71,11 @@
                     <tag-ativo [status]="tenant.isActive"></tag-ativo>
                 </td>
                 <td>
-                    <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Visualizar" nzTooltipPlacement="top" class="me-1"
-                        nz-button nzType="primary" (click)="openViewTenantModal(tenant.id)">
-                        <span nz-icon nzType="eye"></span>
-                    </button>
                     @if(tenant.isActive){
+                        <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Visualizar" nzTooltipPlacement="top" class="me-1"
+                            nz-button nzType="primary" (click)="openViewTenantModal(tenant.id)">
+                            <span nz-icon nzType="eye"></span>
+                        </button>
                         <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1"
                             nz-button nzType="primary" (click)="openEditTenantModal(tenant)">
                             <span nz-icon nzType="edit"></span>
@@ -85,7 +85,6 @@
                             <span nz-icon nzType="pause-circle"></span>
                         </button>
                     }
-                    
                 </td>
             </tr>
             }@empty {}

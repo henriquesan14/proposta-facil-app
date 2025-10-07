@@ -23,6 +23,14 @@
           </nz-form-control>
         </nz-form-item>
       </div>
+      <div nz-col [nzSpan]="4">
+          <nz-form-item>
+              <nz-form-label>Somente ativos</nz-form-label>
+              <nz-form-control>
+              <nz-switch formControlName="onlyActive"></nz-switch>
+              </nz-form-control>
+          </nz-form-item>
+      </div>
     </div>
     <div nz-row class="mt-2 mb-2">
       <div nz-col [nzXs]="24" [nzMd]="12">
@@ -47,6 +55,7 @@
         <th>Email</th>
         <th>Telefone</th>
         <th>CPF/CNPJ</th>
+        <th>Ativo</th>
         <th>Ações</th>
       </tr>
     </thead>
@@ -58,14 +67,24 @@
         <td>{{ client.phoneNumber | phone }}</td>
         <td>{{ client.document | cpfCnpj }}</td>
         <td>
-          <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1" nz-button
-            nzType="primary" (click)="openEditClientModal(client)">
-            <span nz-icon nzType="edit"></span>
-          </button>
-          <button hasRole="DELETE_USER" nz-tooltip nzTooltipTitle="Excluir" nzTooltipPlacement="top" nz-button
-            nzType="primary" (click)="showConfirm(client.id)" nzDanger>
-            <span nz-icon nzType="delete"></span>
-          </button>
+          <tag-ativo [status]="client.isActive"></tag-ativo>
+        </td>
+        <td>
+          
+          @if(client.isActive){
+            <button nz-tooltip nzTooltipTitle="Visualizar" nzTooltipPlacement="top" class="me-1" nz-button
+              nzType="primary" (click)="openViewClientModal(client.id)">
+              <span nz-icon nzType="eye"></span>
+            </button>
+            <button nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1" nz-button
+              nzType="primary" (click)="openEditClientModal(client)">
+              <span nz-icon nzType="edit"></span>
+            </button>
+            <button nz-tooltip nzTooltipTitle="Desativar" nzTooltipPlacement="top" nz-button
+              nzType="primary" (click)="showConfirm(client.id)" nzDanger>
+              <span nz-icon nzType="pause-circle"></span>
+            </button>
+          }
         </td>
       </tr>
       }@empty {}

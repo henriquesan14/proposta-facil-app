@@ -80,14 +80,16 @@
             nzType="primary" (click)="openViewUserModal(user.id)">
             <span nz-icon nzType="eye"></span>
           </button>
-          <button nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1" nz-button
-            nzType="primary" (click)="openEditUserModal(user.id)">
-            <span nz-icon nzType="edit"></span>
-          </button>
-          <button nz-tooltip nzTooltipTitle="Desativar" nzTooltipPlacement="top" nz-button
-            nzType="primary" (click)="showConfirm(user.id)" nzDanger>
-            <span nz-icon nzType="pause-circle"></span>
-          </button>
+          @if(user.isActive){
+            <button nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1" nz-button
+              nzType="primary" (click)="openEditUserModal(user.id)">
+              <span nz-icon nzType="edit"></span>
+            </button>
+            <button nz-tooltip nzTooltipTitle="Desativar" nzTooltipPlacement="top" nz-button
+              nzType="primary" (click)="showConfirm(user.id)" nzDanger>
+              <span nz-icon nzType="pause-circle"></span>
+            </button>
+          }
         </td>
       </tr>
       }@empty {}

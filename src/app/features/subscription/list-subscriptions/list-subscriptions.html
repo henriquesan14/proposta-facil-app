@@ -106,6 +106,8 @@
                     <tag-ativo [status]="subscription.isActive"></tag-ativo>
                 </td>
                 <td>
+
+                    @if(subscription.isActive){
                     <button nz-tooltip nzTooltipTitle="Visualizar" nzTooltipPlacement="top" class="me-1" nz-button
                         nzType="primary" (click)="openViewSubscriptionModal(subscription.id)">
                         <span nz-icon nzType="eye"></span>
@@ -114,14 +116,12 @@
                         nz-button nzType="primary" (click)="openListPayments(subscription.id)">
                         <span nz-icon nzType="dollar"></span>
                     </button>
-                    @if(subscription.isActive){
                     <button nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1" nz-button
                         nzType="primary" (click)="openEditSubscriptionModal(subscription)">
                         <span nz-icon nzType="edit"></span>
                     </button>
-                    <button nz-tooltip
-                        nzTooltipTitle="Desativar" nzTooltipPlacement="top"
-                        nz-button nzType="primary" (click)="showConfirm(subscription)" nzDanger>
+                    <button nz-tooltip nzTooltipTitle="Desativar" nzTooltipPlacement="top" nz-button nzType="primary"
+                        (click)="showConfirm(subscription)" nzDanger>
                         <span nz-icon nzType="pause-circle"></span>
                     </button>
                     }

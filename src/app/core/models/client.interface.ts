@@ -11,4 +11,6 @@ export interface Client {
     addressComplement: string;
     addressCity: string;
     addressState: string;
+    isActive: boolean;
+    createdAt: string;
 }

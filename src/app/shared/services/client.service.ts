@@ -23,6 +23,11 @@ export class ClientService {
     return this.http.get<PaginatedResult<Client>>(`${this.API}/`, {params});
   }
 
+  getClientById(id: string): Observable<Client>{
+    return this.http.get<Client>(`${this.API}/${id}`);
+  }
+  
+
   createClient(user: Client): Observable<Client>{
     return this.http.post<Client>(`${this.API}/`, user);
   }
