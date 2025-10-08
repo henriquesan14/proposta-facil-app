@@ -12,4 +12,6 @@ export interface Proposal {
   totalAmount: number
   validUntil: string
   items: ProposalItem[]
+  isActive: boolean
+  createdAt: string
 }

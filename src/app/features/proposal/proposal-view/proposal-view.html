@@ -1,0 +1,52 @@
+@if(proposal){
+
+<nz-descriptions nzBordered [nzColumn]="2">
+    <nz-descriptions-item nzTitle="Número">{{ proposal.number }}</nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Status">{{ proposal.proposalStatus }}</nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Criada em">{{ proposal.createdAt | date:'dd/MM/yyyy' }}</nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Válida até">{{ proposal.validUntil | date:'dd/MM/yyyy' }}</nz-descriptions-item>
+</nz-descriptions>
+
+<nz-divider></nz-divider>
+
+<h3>Cliente</h3>
+<nz-descriptions nzBordered [nzColumn]="1">
+    <nz-descriptions-item nzTitle="Nome">{{ proposal.client.name }}</nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Email">{{ proposal.client.email }}</nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Telefone">{{ proposal.client.phoneNumber | phone}}</nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Documento">{{ proposal.client.document }}</nz-descriptions-item>
+</nz-descriptions>
+
+<nz-divider></nz-divider>
+
+<h3>Itens</h3>
+<nz-table #itemsTable [nzData]="proposal.items" nzBordered nzFrontPagination="false">
+    <thead>
+        <tr>
+            <th>Produto</th>
+            <th>Descrição</th>
+            <th>Qtd</th>
+            <th>Valor Unitário</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for(item of proposal.items; track item.id){
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.unitPrice | currency:'BRL' }}</td>
+            <td>{{ item.totalPrice | currency:'BRL' }}</td>
+        </tr>
+        }
+    </tbody>
+</nz-table>
+
+<nz-divider></nz-divider>
+
+<div class="text-right font-semibold">
+    <span style="font-size: 15px;"><strong>Total:</strong> {{ proposal.totalAmount | currency:proposal.currency }}</span>
+</div>
+
+}

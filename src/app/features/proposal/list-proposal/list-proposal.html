@@ -7,7 +7,7 @@
 
   <form nz-form [formGroup]="filtroForm" (ngSubmit)="getProposals()" nzLayout="vertical">
     <div nz-row [nzGutter]="12">
-      <div nz-col [nzSpan]="6">
+      <div nz-col [nzSpan]="4">
         <nz-form-item>
           <nz-form-label for="titleFilter">Titulo</nz-form-label>
           <nz-form-control>
@@ -15,7 +15,7 @@
           </nz-form-control>
         </nz-form-item>
       </div>
-      <div nz-col [nzSpan]="6">
+      <div nz-col [nzSpan]="4">
         <nz-form-item>
           <nz-form-label for="documentFilter">CPF/CNPJ</nz-form-label>
           <nz-form-control>
@@ -23,7 +23,7 @@
           </nz-form-control>
         </nz-form-item>
       </div>
-      <div nz-col [nzSpan]="6">
+      <div nz-col [nzSpan]="4">
         <nz-form-item>
           <nz-form-label for="numberFilter">Número</nz-form-label>
           <nz-form-control>
@@ -31,7 +31,7 @@
           </nz-form-control>
         </nz-form-item>
       </div>
-      <div nz-col [nzSpan]="6">
+      <div nz-col [nzSpan]="4">
         <nz-form-item>
           <nz-form-label for="statusFilter">Status</nz-form-label>
           <nz-form-control>
@@ -43,6 +43,14 @@
             </nz-select>
           </nz-form-control>
         </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="4">
+          <nz-form-item>
+              <nz-form-label>Somente ativos</nz-form-label>
+              <nz-form-control>
+              <nz-switch formControlName="onlyActive"></nz-switch>
+              </nz-form-control>
+          </nz-form-item>
       </div>
     </div>
     <div nz-row class="mt-2 mb-2">
@@ -70,6 +78,7 @@
         <th>Status</th>
         <th>Total</th>
         <th>Data de expiração</th>
+        <th>Ativo</th>
         <th>Ações</th>
       </tr>
     </thead>
@@ -83,7 +92,15 @@
         <td>{{ proposal.totalAmount | currency: proposal.currency }}</td>
         <td>{{ proposal.validUntil | date: 'dd/MM/yyyy' }}</td>
         <td>
-          <button nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1" nz-button
+          <tag-ativo [status]="proposal.isActive"></tag-ativo>
+        </td>
+        <td>
+          @if(proposal.isActive){
+            <button nz-tooltip nzTooltipTitle="Visualizar" nzTooltipPlacement="top" class="me-1" nz-button
+            nzType="primary" (click)="openViewProposalModal(proposal.id)">
+            <span nz-icon nzType="eye"></span>
+          </button>
+            <button nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1" nz-button
             nzType="primary" (click)="openEditProposalModal(proposal.id)">
             <span nz-icon nzType="edit"></span>
           </button>
@@ -91,10 +108,11 @@
             nzType="primary" (click)="sendProposal(proposal.id)">
             <span nz-icon nzType="send"></span>
           </button>
-          <button nz-tooltip nzTooltipTitle="Excluir" nzTooltipPlacement="top" nz-button
+          <button nz-tooltip nzTooltipTitle="Desativar" nzTooltipPlacement="top" nz-button
             nzType="primary" (click)="showConfirm(proposal.id)" nzDanger>
-            <span nz-icon nzType="delete"></span>
+            <span nz-icon nzType="pause-circle"></span>
           </button>
+          }
         </td>
       </tr>
       }@empty {}
