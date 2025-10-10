@@ -2,7 +2,12 @@
 
 <nz-descriptions nzBordered [nzColumn]="2">
     <nz-descriptions-item nzTitle="Número">{{ proposal.number }}</nz-descriptions-item>
-    <nz-descriptions-item nzTitle="Status">{{ proposal.proposalStatus }}</nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Status">
+        <nz-tag 
+              [nzColor]="proposal.proposalStatus === 'Approved' ? 'green' : proposal.proposalStatus === 'Draft' || proposal.proposalStatus === 'Sent' ? 'orange' : 'red'">
+              {{ proposal.proposalStatus }}
+          </nz-tag>
+    </nz-descriptions-item>
     <nz-descriptions-item nzTitle="Criada em">{{ proposal.createdAt | date:'dd/MM/yyyy' }}</nz-descriptions-item>
     <nz-descriptions-item nzTitle="Válida até">{{ proposal.validUntil | date:'dd/MM/yyyy' }}</nz-descriptions-item>
 </nz-descriptions>

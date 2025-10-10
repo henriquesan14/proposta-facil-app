@@ -9,10 +9,11 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { PhonePipe } from '../../../shared/pipes/phone-pipe.pipe';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 
 @Component({
   selector: 'app-proposal-view',
-  imports: [NzDescriptionsModule, NzCardModule, NzDividerModule, NzTableModule, CurrencyPipe, DatePipe, PhonePipe],
+  imports: [NzDescriptionsModule, NzCardModule, NzDividerModule, NzTableModule, CurrencyPipe, DatePipe, PhonePipe, NzTagModule],
   templateUrl: './proposal-view.html',
   styleUrl: './proposal-view.css'
 })

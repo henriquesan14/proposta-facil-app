@@ -36,7 +36,7 @@ export class FormTenant implements OnInit, OnDestroy {
     ngOnInit(): void {
       this.formTenant = this.formBuilder.group({
         name: [null, [Validators.required, Validators.maxLength(100)]],
-        tipoPessoa: ['PESSOA_FISICA'],
+        tipoPessoa: ['PESSOA_JURIDICA'],
         domain: [null, [Validators.required, Validators.maxLength(100)]],
         document: [null, Validators.required],
         email: [null, [Validators.required, Validators.email]],

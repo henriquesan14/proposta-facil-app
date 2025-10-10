@@ -15,7 +15,6 @@
                 <th>Tipo Pagamento</th>
                 <th>Data Vencimento</th>
                 <th>Data Pagamento</th>
-                <th>Ativo</th>
                 <th>Ações</th>
             </tr>
         </thead>
@@ -32,9 +31,6 @@
                 <td>{{ payment.billingType }}</td>
                 <td>{{ payment.dueDate | date: 'dd/MM/yyyy'}}</td>
                 <td>{{ payment.paymentDate | date: 'dd/MM/yyyy'}}</td>
-                <td>
-                    <tag-ativo [status]="payment.isActive"></tag-ativo>
-                </td>
                 <td>
                     <button (click)="openPayment(payment.paymentLink)" nz-tooltip nzTooltipTitle="Visualizar" nzTooltipPlacement="top" class="me-1"
                         nz-button nzType="primary">

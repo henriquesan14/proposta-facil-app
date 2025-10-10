@@ -23,12 +23,13 @@ import { FormProposal } from '../form-proposal/form-proposal';
 import { TagAtivo } from '../../../shared/components/tag-ativo-inativo/tag-ativo';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { ProposalView } from '../proposal-view/proposal-view';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 
 @Component({
   standalone: true,
   selector: 'app-list-proposal',
   imports: [NzTableModule, NzButtonModule, NzIconModule, NzModalModule, NzTooltipModule, ReactiveFormsModule, NzFormModule, NzPaginationModule, BtnPesquisarComponent, BtnLimparComponent, NzInputModule, BtnNovoComponent,
-    DatePipe, NzSelectModule, NgxMaskDirective, CurrencyPipe, TagAtivo, NzSwitchModule],
+    DatePipe, NzSelectModule, NgxMaskDirective, CurrencyPipe, TagAtivo, NzSwitchModule, NzTagModule],
   templateUrl: './list-proposal.html',
   styleUrl: './list-proposal.css'
 })

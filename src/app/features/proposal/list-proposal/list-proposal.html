@@ -88,7 +88,12 @@
         <td>{{ proposal.title }}</td>
         <td>{{ proposal.client.name }}</td>
         <td>{{ proposal.number }}</td>
-        <td>{{ proposal.proposalStatus }}</td>
+        <td>
+          <nz-tag 
+              [nzColor]="proposal.proposalStatus === 'Approved' ? 'green' : proposal.proposalStatus === 'Draft' || proposal.proposalStatus === 'Sent' ? 'orange' : 'red'">
+              {{ proposal.proposalStatus }}
+          </nz-tag>
+        </td>
         <td>{{ proposal.totalAmount | currency: proposal.currency }}</td>
         <td>{{ proposal.validUntil | date: 'dd/MM/yyyy' }}</td>
         <td>
