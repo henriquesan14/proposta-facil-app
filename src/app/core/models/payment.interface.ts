@@ -9,5 +9,6 @@ export interface Payment {
   paymentAsaasId: string;
   paymentLink: string;
   status: string;
+  description: string;
   isActive: boolean;
 }

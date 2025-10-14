@@ -1,0 +1,76 @@
+<div class="p-6 space-y-6">
+  @if(loading){
+  <div class="flex justify-center mt-10">
+    <nz-spin nzTip="Carregando planos..."></nz-spin>
+  </div>
+  }
+
+  @if(!loading){
+  <nz-row [nzGutter]="16">
+    @for(plan of plans; track plan.id){
+    <nz-col [nzSpan]="24" [nzXs]="24" [nzSm]="12" [nzMd]="12" [nzLg]="12" [nzXl]="12">
+      <nz-card
+        [nzTitle]="plan.name"
+        class="mb-4"
+        [ngClass]="{ 'border-blue-500 border-2': isCurrentPlan(plan.id) }"
+      >
+        <p class="text-gray-600 mb-3">{{ plan.description }}</p>
+        <p><strong>{{ plan.price | currency: 'BRL' }}</strong>/mês</p>
+        <p class="text-sm text-gray-500 mb-4">
+          {{ plan.maxProposalsPerMonth }} propostas/mês
+        </p>
+
+        <div class="mt-4">
+          @if(!isCurrentPlan(plan.id)){
+          <button
+            nz-button
+            nzType="primary"
+            nzBlock
+            [nzLoading]="loadingSelect === plan.id"
+            (click)="selectPlan(plan)"
+          >
+            Escolher Plano
+          </button>
+          }
+
+          @if(isCurrentPlan(plan.id)){
+          <button nz-button nzBlock disabled>
+            Plano Atual
+          </button>
+          }
+        </div>
+
+        <!-- Se o plano estiver selecionado, mostra opções de pagamento -->
+        @if(selectedPlan?.id === plan.id){
+        <div class="mt-5 border-t pt-4">
+          <p class="text-gray-600 mb-2">Escolha a forma de pagamento:</p>
+
+          <nz-radio-group [(ngModel)]="selectedBillingType" class="flex flex-col space-y-2">
+            <label nz-radio nzValue="CREDIT_CARD">Cartão de Crédito</label>
+            <label nz-radio nzValue="BOLETO">Boleto Bancário</label>
+            <label nz-radio nzValue="PIX">PIX</label>
+          </nz-radio-group>
+
+          <div class="mt-4">
+            <button
+              nz-button
+              nzType="primary"
+              nzBlock
+              [disabled]="!selectedBillingType"
+              [nzLoading]="confirming"
+              (click)="confirmChangePlan()"
+            >
+              Confirmar Mudança de Plano
+            </button>
+            <button nz-button nzBlock nzType="default" class="mt-2" (click)="cancelSelection()">
+              Cancelar
+            </button>
+          </div>
+        </div>
+        }
+      </nz-card>
+    </nz-col>
+    }
+  </nz-row>
+  }
+</div>

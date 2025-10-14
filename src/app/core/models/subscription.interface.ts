@@ -7,6 +7,7 @@ export interface Subscription {
   tenantId: string;
   subscriptionPlanId: string;
   subscriptionPlan: SubscriptionPlan;
+  pendingUpgradePlan: SubscriptionPlan;
   startDate: string;
   status: string;
   proposalsUsed: number;

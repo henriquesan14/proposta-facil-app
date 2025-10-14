@@ -1,21 +1,22 @@
-@if(data){
+@if (data) {
 <div class="p-6 space-y-6">
   <!-- Seção da assinatura ativa -->
-  @if(data.activeSubscription){
+  @if (data.activeSubscription) {
   <nz-card nzTitle="Assinatura Atual" nzBordered>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
-        <strong>Plano: </strong> {{ data.activeSubscription.subscriptionPlan.name }}
+        <strong>Plano: </strong>
+        {{ data.activeSubscription.subscriptionPlan.name }}
       </div>
       <div>
         <strong>Status: </strong>
         <nz-tag [nzColor]="
-            data.activeSubscription.status === 'Active'
-              ? 'green'
-              : data.activeSubscription.status === 'Pending'
-              ? 'orange'
-              : 'red'
-          ">
+                data.activeSubscription.status === 'Active'
+                  ? 'green'
+                  : data.activeSubscription.status === 'Pending'
+                  ? 'orange'
+                  : 'red'
+              ">
           {{ data.activeSubscription.status }}
         </nz-tag>
       </div>
@@ -31,16 +32,13 @@
     </div>
 
     <div class="mt-2">
-      <!-- Link de pagamento se ainda estiver pendente -->
-      @if(data.activeSubscription.status === 'Pending'){
+      @if (data.activeSubscription.status === 'Pending') {
       <button class="me-1" nz-button nzType="primary" [nzLoading]="loadingPayment"
         (click)="openPaymentLink(data.activeSubscription.paymentLink)">
         Pagar agora
       </button>
       }
 
-
-      <!-- Botão para trocar plano -->
       <button nz-button nzType="default" (click)="openChangePlanModal()">
         Alterar Plano
       </button>
@@ -48,19 +46,27 @@
   </nz-card>
   }
 
+  @if (data.activeSubscription && data.activeSubscription.pendingUpgradePlan) {
+  <nz-tag [nzColor]="'orange'" class="mt-1">
+    Upgrade pendente - {{data.activeSubscription.pendingUpgradePlan.name}}
+    {{data.activeSubscription.pendingUpgradePlan.price | currency: 'BRL'}}
+  </nz-tag>
+  }
 
   <!-- Histórico de pagamentos -->
+  @if(data.payments && data.payments.count > 0){
   <nz-card nzTitle="Histórico de Pagamentos" nzBordered class="mt-1">
     <div class="d-flex justify-content-between align-items-center p-2 mb-2">
       <nz-pagination nzSize="small" [nzTotal]="data.payments.count" [(nzPageIndex)]="data.payments.pageIndex"
         [nzPageSize]="data.payments.pageSize" (nzPageIndexChange)="onPageChange($event)"
-        (nzPageSizeChange)="onPageSizeChange($event)" [nzShowSizeChanger]="true" [nzPageSizeOptions]="[2,5,10]"
+        (nzPageSizeChange)="onPageSizeChange($event)" [nzShowSizeChanger]="true" [nzPageSizeOptions]="[2, 5, 10]"
         style="max-width: 600px; width: 100%;">
       </nz-pagination>
     </div>
     <nz-table [nzData]="data.payments.data" [nzFrontPagination]="false" [nzSize]="'small'" [nzBordered]="true">
       <thead>
         <tr>
+          <th>Descrição</th>
           <th>Status</th>
           <th>Valor</th>
           <th>Forma</th>
@@ -70,8 +76,11 @@
         </tr>
       </thead>
       <tbody>
-        @for(p of data.payments.data; track p.id){
+        @for (p of data.payments.data; track p.id) {
         <tr>
+          <td>
+            {{p.description}}
+          </td>
           <td>
             <nz-tag [nzColor]="p.status === 'RECEIVED' ? 'green' : 'orange'">
               {{ p.status }}
@@ -82,18 +91,18 @@
           <td>{{ p.dueDate | date: 'dd/MM/yyyy' }}</td>
           <td>{{ p.paymentDate | date: 'dd/MM/yyyy' }}</td>
           <td>
-            @if(p.paymentLink){
+            @if (p.paymentLink) {
             <a nz-button nzType="link" (click)="openPaymentLink(p.paymentLink)">
               Ver link
             </a>
             }
-
           </td>
         </tr>
         }
       </tbody>
     </nz-table>
   </nz-card>
-</div>
 
+  }
+</div>
 }

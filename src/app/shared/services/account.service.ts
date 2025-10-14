@@ -3,6 +3,7 @@ import { environment } from '../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SubscriptionAccountResponse } from '../../core/models/subscription-account-response.interface';
+import { ChangePlanRequest } from '../../core/models/change-plan-request.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -19,5 +20,9 @@ export class AccountService {
       }
     }
     return this.http.get<SubscriptionAccountResponse>(`${this.API}/subscription`);
+  }
+
+  changePlan(changePlan: ChangePlanRequest){
+    return this.http.post(`${this.API}/change-plan`, changePlan);
   }
 }
