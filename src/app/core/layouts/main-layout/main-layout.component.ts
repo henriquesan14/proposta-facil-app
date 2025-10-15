@@ -68,8 +68,8 @@ export class MainLayoutComponent {
     }
   ]
 
-  goToProfile() {
-    this.router.navigateByUrl('/account/update-password');
+  updatePassword() {
+    this.router.navigateByUrl('account/update-password');
   }
   
   logout() {

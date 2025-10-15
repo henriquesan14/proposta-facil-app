@@ -7,6 +7,7 @@ import { User } from '../../core/models/user.interface';
 import { ActivateAccountRequest } from '../../core/models/activate-account-request.interface';
 import { ForgotPasswordRequest } from '../../core/models/forgot-password-request.interface';
 import { ResetPasswordRequest } from '../../core/models/reset-password-request.interface';
+import { UpdatePasswordRequest } from '../../core/models/update-password-request.interface';
 
 
 @Injectable({
@@ -38,5 +39,9 @@ export class AuthService {
 
     resetPassword(resetPassword: ResetPasswordRequest){
       return this.http.post(`${this.API}/reset-password`, resetPassword);
+    }
+
+    updatePassword(updatePassword: UpdatePasswordRequest){
+      return this.http.post(`${this.API}/update-password`, updatePassword);
     }
 }
