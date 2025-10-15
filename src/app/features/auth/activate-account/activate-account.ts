@@ -23,10 +23,19 @@ export class ActivateAccount {
   activateForm!: FormGroup;
 
   loading = false;
+  showPassword = false;
+  showConfirmPassword = false;
 
   constructor(private fb: FormBuilder, private route: ActivatedRoute) {
     this.activateForm = this.fb.group({
-      password: [null, [Validators.required, Validators.minLength(6)]],
+      password: [null, [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(/(?=.*[A-Z])/), // pelo menos uma maiúscula
+        Validators.pattern(/(?=.*[a-z])/), // pelo menos uma minúscula
+        Validators.pattern(/(?=.*[0-9])/), // pelo menos um número
+        Validators.pattern(/(?=.*[^a-zA-Z0-9])/) // pelo menos um caractere especial
+      ]],
       confirmPassword: [null, [Validators.required]],
     }, {
       validators: ConfirmPasswordValidators.confirmPasswordValidator

@@ -70,6 +70,12 @@ export class UpdatePassword {
         this.toastr.success('Senha atualizada com sucesso!', 'Sucesso');
         this.form.reset();
       },
+      error: () => {
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+      }
     });
   }
 }

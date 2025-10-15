@@ -8,10 +8,11 @@ import { ResetPasswordRequest } from '../../../core/models/reset-password-reques
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 @Component({
   selector: 'app-reset-password',
-  imports: [ReactiveFormsModule, NzFormModule, NzInputModule, NzButtonModule],
+  imports: [ReactiveFormsModule, NzFormModule, NzInputModule, NzButtonModule, NzIconModule],
   templateUrl: './reset-password.html',
   styleUrl: './reset-password.css'
 })
@@ -22,10 +23,19 @@ export class ResetPassword {
   resetForm!: FormGroup;
 
   loading = false;
+  showPassword = false;
+  showConfirmPassword = false;
 
   constructor(private fb: FormBuilder, private route: ActivatedRoute) {
     this.resetForm = this.fb.group({
-      password: [null, [Validators.required, Validators.minLength(6)]],
+      password: [null, [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(/(?=.*[A-Z])/), // pelo menos uma maiúscula
+        Validators.pattern(/(?=.*[a-z])/), // pelo menos uma minúscula
+        Validators.pattern(/(?=.*[0-9])/), // pelo menos um número
+        Validators.pattern(/(?=.*[^a-zA-Z0-9])/) // pelo menos um caractere especial
+      ]],
       confirmPassword: [null, [Validators.required]],
     }, {
       validators: ConfirmPasswordValidators.confirmPasswordValidator
