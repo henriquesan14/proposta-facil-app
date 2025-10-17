@@ -23,6 +23,10 @@ import { FormTenant } from '../form-tenant/form-tenant';
 import { TagAtivo } from '../../../shared/components/tag-ativo-inativo/tag-ativo';
 import { TenantView } from '../tenant-view/tenant-view';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { AdminService } from '../../../shared/services/admin.service';
+import { LocalstorageService } from '../../../shared/services/local-storage.service';
+import { Router } from '@angular/router';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-list-tenants',
@@ -37,7 +41,9 @@ export class ListTenants implements OnInit, OnDestroy {
   confirmModal?: NzModalRef;
   private modal = inject(NzModalService);
   private toastr = inject(ToastrService);
-  constructor(private tenantService: TenantService, private formBuilder: FormBuilder) {
+  private message = inject(NzMessageService);
+  constructor(private tenantService: TenantService, private adminService: AdminService, private localStorageService: LocalstorageService,
+     private formBuilder: FormBuilder, private router: Router) {
     this.filtroForm = this.formBuilder.group({
       nameFilter: [null],
       document: [''],
@@ -162,6 +168,16 @@ export class ListTenants implements OnInit, OnDestroy {
           }
         })
     });
+  }
+
+  impersonate(tenantId: string){
+    this.adminService.impersonateTenant(tenantId).subscribe({
+      next: (res) => {
+        this.message.success('Você entrou no modo de impersonate');
+        this.localStorageService.setUserStorage(res);
+        this.router.navigate(['/users/list']);
+      }
+    })
   }
 
   limpar() {

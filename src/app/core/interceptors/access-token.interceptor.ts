@@ -29,7 +29,7 @@ export const AccessTokenInterceptor = (req: HttpRequest<unknown>, next: HttpHand
           return next(authReq);
         }),
         catchError((refreshErr) => {
-          localStorageService.removeUsertorage();
+          localStorageService.removeUserStorage();
           router.navigateByUrl('/');
           return throwError(() => refreshErr);
         }),

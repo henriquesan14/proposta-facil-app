@@ -1,3 +1,5 @@
+import { Tenant } from "./tenant.interface"
+
 export interface User {
     id: string
     name: string
@@ -7,4 +9,5 @@ export interface User {
     disabled: boolean
     isActive: boolean
     createdAt: string
+    tenantImpersonate?: Tenant
 }

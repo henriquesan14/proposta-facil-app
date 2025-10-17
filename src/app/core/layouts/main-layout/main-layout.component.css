@@ -92,6 +92,10 @@
     min-height: 100%;
     overflow: auto;
   }
+
+  ::ng-deep .ant-dropdown {
+    width: 100%;
+  }
   
   ::ng-deep .ant-dropdown-menu-item {
     padding: 10px 16px;

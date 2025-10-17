@@ -19,7 +19,7 @@
     <nz-descriptions-item nzTitle="Nome">{{ proposal.client.name }}</nz-descriptions-item>
     <nz-descriptions-item nzTitle="Email">{{ proposal.client.email }}</nz-descriptions-item>
     <nz-descriptions-item nzTitle="Telefone">{{ proposal.client.phoneNumber | phone}}</nz-descriptions-item>
-    <nz-descriptions-item nzTitle="Documento">{{ proposal.client.document }}</nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Documento">{{ proposal.client.document | cpfCnpj }}</nz-descriptions-item>
 </nz-descriptions>
 
 <nz-divider></nz-divider>

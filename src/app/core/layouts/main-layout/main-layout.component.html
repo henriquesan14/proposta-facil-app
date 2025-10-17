@@ -9,8 +9,9 @@
     </div>
     <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
       @for (item of menuItems; track item.title) {
-      <li [hasRole]="item.role" nz-menu-item nz-tooltip nzTooltipPlacement="right" [nzTooltipTitle]="isCollapsed ? item.title : ''"
-        [routerLink]="item.route" routerLinkActive="ant-menu-item-selected" [routerLinkActiveOptions]="{ exact: true }">
+      <li [hasRole]="item.role" nz-menu-item nz-tooltip nzTooltipPlacement="right"
+        [nzTooltipTitle]="isCollapsed ? item.title : ''" [routerLink]="item.route"
+        routerLinkActive="ant-menu-item-selected" [routerLinkActiveOptions]="{ exact: true }">
         <nz-icon [nzType]="item.icon" />
         <span>{{item.title}}</span>
       </li>
@@ -26,7 +27,35 @@
           </span>
         </span>
 
-        <!-- 🧑 Usuário / Menu -->
+        @if(isImpersonating){
+        <nz-tag [nzColor]="'red'">
+          <i nz-icon nzType="eye"></i>
+          MODO DE IMPERSONATE - {{tenant}}
+          <i nz-icon nzType="eye"></i>
+        </nz-tag>
+        <div class="user-dropdown" nz-dropdown [nzDropdownMenu]="userMenu" nzTrigger="click">
+          <span class="user-info">
+            <img [src]="avatar" alt="avatar" class="avatar" />
+            <span class="username">{{tenant}}</span>
+            <i nz-icon nzType="down"></i>
+          </span>
+        </div>
+
+        <nz-dropdown-menu #userMenu="nzDropdownMenu">
+          <ul nz-menu>
+            <li nz-menu-item (click)="stopImpersonate()" [nzDisabled]="isLoggingOut">
+              @if(!isLoggingOut){
+              <i nz-icon nzType="logout" class="me-1"></i>
+              }@else{
+              <span class="me-1" style="display: inline-block; vertical-align: middle;">
+                <nz-spin [nzSize]="'small'"></nz-spin>
+              </span>
+              }
+              Sair impersonate
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+        }@else {
         <div class="user-dropdown" nz-dropdown [nzDropdownMenu]="userMenu" nzTrigger="click">
           <span class="user-info">
             <img [src]="avatar" alt="avatar" class="avatar" />
@@ -57,6 +86,9 @@
             </li>
           </ul>
         </nz-dropdown-menu>
+        }
+
+
       </div>
     </nz-header>
     <nz-content>

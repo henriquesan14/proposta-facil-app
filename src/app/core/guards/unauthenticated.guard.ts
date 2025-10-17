@@ -6,8 +6,10 @@ export const UnauthenticadedGuard: CanActivateFn = (next: ActivatedRouteSnapshot
     const storageService = inject(LocalstorageService);
     const router = inject(Router);
     if (storageService.getUserStorage()) {
-        router.navigateByUrl('/users/list');
-        return false;
+        storageService.user$.subscribe(user => {
+            user?.role == 'AdminSystem' ? router.navigateByUrl('/tenants/list') : router.navigateByUrl('/users/list');
+            return false;
+        })
     }
     return true;
 }

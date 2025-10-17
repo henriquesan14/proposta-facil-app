@@ -11,12 +11,15 @@ import { LocalstorageService } from '../../../shared/services/local-storage.serv
 import { Menu } from '../../models/menu.interface';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 import { HasRoleDirective } from '../../../shared/directives/has-role.directive';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { AdminService } from '../../../shared/services/admin.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-main-layout',
   standalone: true,
   imports: [CommonModule, RouterLink, RouterOutlet, NzIconModule, NzLayoutModule, NzMenuModule, RouterModule, NzDropdownMenuComponent, NzDropDownModule,
-    NzSpinModule, NzTooltipModule, HasRoleDirective
+    NzSpinModule, NzTooltipModule, HasRoleDirective, NzTagModule
   ],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.css'
@@ -26,6 +29,8 @@ export class MainLayoutComponent {
   private router = inject(Router);
   private localStorageService = inject(LocalstorageService);
   private authService = inject(AuthService);
+  private adminService = inject(AdminService);
+  private message = inject(NzMessageService);
 
   isLoggingOut = false;
 
@@ -76,7 +81,7 @@ export class MainLayoutComponent {
     this.isLoggingOut = true;
     this.authService.logout().subscribe({
       next: () => {
-        this.localStorageService.removeUsertorage();
+        this.localStorageService.removeUserStorage();
         this.router.navigateByUrl('/login');
         this.isLoggingOut = false;
       }
@@ -87,6 +92,16 @@ export class MainLayoutComponent {
     this.router.navigateByUrl('/account/subscription');
   }
 
+  stopImpersonate(){
+    this.adminService.stopImpersonateTenant().subscribe({
+      next: (res) => {
+        this.message.success('Você saiu do modo de impersonate');
+        this.localStorageService.setUserStorage(res);
+        this.router.navigate(['/tenants/list']);
+      }
+    })
+  }
+
   get nomeUsuario(){
     const response = this.localStorageService.getUserStorage();
     return response?.name;
@@ -94,5 +109,14 @@ export class MainLayoutComponent {
 
   get avatar(){
     return '/images/avatar.jpeg';
+  }
+
+  get tenant(){
+    const response = this.localStorageService.getUserStorage();
+    return `${response?.tenantImpersonate?.name}`;
+  }
+
+  get isImpersonating() {
+    return this.localStorageService.isImpersonate();
   }
 }
