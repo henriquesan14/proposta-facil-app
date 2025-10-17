@@ -15,4 +15,5 @@ export interface Tenant {
   asaasId: string
   isActive: boolean
   createdAt: string
+  createdByName: string;
 }

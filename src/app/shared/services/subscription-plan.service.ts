@@ -21,6 +21,10 @@ export class SubscriptionPlanService {
     return this.http.get<SubscriptionPlan[]>(`${this.API}/`, {params});
   }
 
+  getSubscriptionPlanById(id: string): Observable<SubscriptionPlan>{
+      return this.http.get<SubscriptionPlan>(`${this.API}/${id}`);
+  }
+
   createSubscriptionPlan(subscriptionPlan: SubscriptionPlan){
     return this.http.post(`${this.API}`, subscriptionPlan);
   }

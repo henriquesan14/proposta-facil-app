@@ -16,6 +16,10 @@
         {{ subscription.createdAt | date:'dd/MM/yyyy HH:mm' }}
       </nz-descriptions-item>
 
+      <nz-descriptions-item nzTitle="Criado por">
+        {{ subscription.createdByName || 'N/A'}}
+      </nz-descriptions-item>
+
       <nz-descriptions-item nzTitle="Ativo">
         <tag-ativo [status]="subscription.isActive"></tag-ativo>
       </nz-descriptions-item>

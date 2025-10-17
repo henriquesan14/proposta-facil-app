@@ -1,0 +1,22 @@
+@if (subscriptionPlan) {
+  <div class="p-6 max-w-3xl mx-auto bg-white rounded-2xl shadow">
+    <nz-descriptions nzSize="middle" nzBordered [nzColumn]="2">
+      <nz-descriptions-item nzTitle="Nome">{{ subscriptionPlan.name }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Valor">{{ subscriptionPlan.price | currency: 'BRL' }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Qtd. propostas/mês">{{ subscriptionPlan.maxProposalsPerMonth }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Descrição">{{ subscriptionPlan.description }}</nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Data de Criação">
+        {{ subscriptionPlan.createdAt | date:'dd/MM/yyyy HH:mm' }}
+      </nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Criado por">
+        {{ subscriptionPlan.createdByName || 'N/A'}}
+      </nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Ativo">
+        <tag-ativo [status]="subscriptionPlan.isActive"></tag-ativo>
+      </nz-descriptions-item>
+    </nz-descriptions>
+  </div>
+}

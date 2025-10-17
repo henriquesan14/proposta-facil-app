@@ -55,6 +55,10 @@
                 </td>
                 <td>
                     @if(subscriptionPlan.isActive){
+                    <button nz-tooltip nzTooltipTitle="Visualizar" nzTooltipPlacement="top" class="me-1" nz-button
+                        nzType="primary" (click)="openViewSubscriptionPlanModal(subscriptionPlan.id)">
+                        <span nz-icon nzType="eye"></span>
+                    </button>
                     <button hasRole="EDIT_USER" nz-tooltip nzTooltipTitle="Editar" nzTooltipPlacement="top" class="me-1"
                         nz-button nzType="primary" (click)="openEditSubscriptionModal(subscriptionPlan)">
                         <span nz-icon nzType="edit"></span>

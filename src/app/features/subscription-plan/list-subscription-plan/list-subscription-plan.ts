@@ -18,6 +18,7 @@ import { FormSubscriptionPlan } from '../form-subscription-plan/form-subscriptio
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 import { TagAtivo } from '../../../shared/components/tag-ativo-inativo/tag-ativo';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { SubscriptionPlanView } from '../subscription-plan-view/subscription-plan-view';
 
 @Component({
   selector: 'app-list-subscription-plan',
@@ -77,6 +78,18 @@ export class ListSubscriptionPlan implements OnInit, OnDestroy {
         this.getSubscriptionPlans();
       }
     });
+  }
+
+  openViewSubscriptionPlanModal(subscriptionPlanId: string): void {
+      this.modal.create({
+        nzTitle: 'Detalhes plano',
+        nzContent: SubscriptionPlanView,
+        nzWidth: '800px',
+        nzData: {
+          subscriptionPlanId
+        },
+        nzFooter: null,
+      });
   }
 
   openEditSubscriptionModal(subscriptionPlan: SubscriptionPlan): void {

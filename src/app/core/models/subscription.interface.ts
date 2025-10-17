@@ -17,4 +17,5 @@ export interface Subscription {
   tenant: Tenant;
   isActive: boolean;
   createdAt: string
+  createdByName: string;
 }

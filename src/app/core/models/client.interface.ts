@@ -13,4 +13,5 @@ export interface Client {
     addressState: string;
     isActive: boolean;
     createdAt: string;
+    createdByName: string;
 }

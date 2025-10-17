@@ -9,6 +9,10 @@
         {{ user.createdAt | date:'dd/MM/yyyy HH:mm' }}
       </nz-descriptions-item>
 
+      <nz-descriptions-item nzTitle="Criado por">
+        {{ user.createdByName || 'N/A'}}
+      </nz-descriptions-item>
+
       <nz-descriptions-item nzTitle="Ativo">
         <tag-ativo [status]="user.isActive"></tag-ativo>
       </nz-descriptions-item>

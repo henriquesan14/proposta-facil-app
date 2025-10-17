@@ -9,5 +9,6 @@ export interface User {
     disabled: boolean
     isActive: boolean
     createdAt: string
+    createdByName: string
     tenantImpersonate?: Tenant
 }

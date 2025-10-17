@@ -14,4 +14,5 @@ export interface Proposal {
   items: ProposalItem[]
   isActive: boolean
   createdAt: string
+  createdByName: string;
 }

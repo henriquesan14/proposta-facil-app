@@ -24,6 +24,10 @@
         {{ tenant.createdAt | date:'dd/MM/yyyy HH:mm' }}
       </nz-descriptions-item>
 
+      <nz-descriptions-item nzTitle="Criado por">
+        {{ tenant.createdByName || 'N/A'}}
+      </nz-descriptions-item>
+
       <nz-descriptions-item nzTitle="Ativo">
         <tag-ativo [status]="tenant.isActive"></tag-ativo>
       </nz-descriptions-item>

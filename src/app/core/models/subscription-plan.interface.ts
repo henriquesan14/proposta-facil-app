@@ -6,4 +6,5 @@ export interface SubscriptionPlan {
     description: string;
     isActive: boolean;
     createdAt: string;
+    createdByName: string;
 }
