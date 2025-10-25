@@ -1,8 +1,12 @@
 <div class="container">
     <div style="display: flex;">
         <h2 nz-title class="text-center me-2">Planos</h2>
-        <btn-novo title="Novo plano" (clickEvent)="openNewSubscriptionPlanModal()">
+        <btn-novo class="me-1" title="Novo plano" (clickEvent)="openNewSubscriptionPlanModal()">
         </btn-novo>
+        <button nz-button nzType="default" nz-tooltip nzTooltipTitle="Atualizar lista" 
+          (click)="getSubscriptionPlans()" class="d-flex align-items-center">
+            <span nz-icon nzType="reload" nzTheme="outline"></span>
+        </button>
     </div>
 
     <form nz-form [formGroup]="filtroForm" (ngSubmit)="getSubscriptionPlans()" nzLayout="vertical">

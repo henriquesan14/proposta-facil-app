@@ -1,8 +1,12 @@
 <div class="container">
   <div style="display: flex;">
     <h2 nz-title class="text-center me-2">Usuários</h2>
-    <btn-novo title="Novo usuário" (clickEvent)="openNewUserModal()">
+    <btn-novo class="me-1" title="Novo usuário" (clickEvent)="openNewUserModal()">
     </btn-novo>
+    <button nz-button nzType="default" nz-tooltip nzTooltipTitle="Atualizar lista" 
+      (click)="getUsers()" class="d-flex align-items-center">
+        <span nz-icon nzType="reload" nzTheme="outline"></span>
+    </button>
   </div>
 
   <form nz-form [formGroup]="filtroForm" (ngSubmit)="getUsers()" nzLayout="vertical">
