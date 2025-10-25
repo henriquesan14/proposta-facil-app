@@ -11,7 +11,7 @@ import { Payment } from '../../core/models/payment.interface';
   providedIn: 'root'
 })
 export class SubscriptionService {
-  private API: string = `${environment.apiUrl}/admin/subscriptions`;
+  private API: string = `${environment.apiUrl}/subscription`;
   constructor(private http: HttpClient) { }
 
   getSubscriptions(parametros: any): Observable<PaginatedResult<Subscription>>{

@@ -8,7 +8,7 @@ import { SubscriptionPlan } from '../../core/models/subscription-plan.interface'
   providedIn: 'root'
 })
 export class SubscriptionPlanService {
-  private API: string = `${environment.apiUrl}/admin/subscriptionPlans`;
+  private API: string = `${environment.apiUrl}/subscriptionPlan`;
   constructor(private http: HttpClient) { }
 
   getSubscriptionPlans(parametros: any): Observable<SubscriptionPlan[]>{

@@ -10,7 +10,7 @@ import { Tenant } from '../../core/models/tenant.interface';
 })
 export class TenantService {
 
-  private API: string = `${environment.apiUrl}/admin/tenants`;
+  private API: string = `${environment.apiUrl}/tenant`;
   constructor(private http: HttpClient) { }
 
   getTenants(parametros: any): Observable<PaginatedResult<Tenant>>{

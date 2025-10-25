@@ -113,24 +113,6 @@ export class ListSubscriptions implements OnInit, OnDestroy {
     });
   }
 
-  openEditSubscriptionModal(subscription: Subscription): void {
-    // const modal = this.modal.create({
-    //   nzTitle: 'Editar tenant',
-    //   nzContent: FormTenant,
-    //   nzWidth: '800px',
-    //   nzData: {
-    //     tenantId: tenant.id
-    //   },
-    //   nzFooter: null
-    // });
-
-    // modal.afterClose.subscribe((result) => {
-    //   if (result) {
-    //     this.getTenants();
-    //   }
-    // });
-  }
-
   openViewSubscriptionModal(subscriptionId: string): void {
     this.modal.create({
       nzTitle: 'Detalhes assinatura',

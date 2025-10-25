@@ -92,24 +92,6 @@ export class ListSubscriptionPlan implements OnInit, OnDestroy {
       });
   }
 
-  openEditSubscriptionModal(subscriptionPlan: SubscriptionPlan): void {
-    // const modal = this.modal.create({
-    //   nzTitle: 'Editar tenant',
-    //   nzContent: FormTenant,
-    //   nzWidth: '800px',
-    //   nzData: {
-    //     tenantId: tenant.id
-    //   },
-    //   nzFooter: null
-    // });
-
-    // modal.afterClose.subscribe((result) => {
-    //   if (result) {
-    //     this.getTenants();
-    //   }
-    // });
-  }
-
   showConfirm(subscriptionPlan: SubscriptionPlan): void {
       this.confirmModal = this.modal.confirm({
         nzTitle: 'Exclusão',

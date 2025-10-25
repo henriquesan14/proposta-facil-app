@@ -51,7 +51,9 @@ export class FormTenant implements OnInit, OnDestroy {
           addressComplement: [null],
         }),
       });
-      
+      if(this.data && this.data.tenantId){
+        this.getTenant();
+      }
     }
   
     ngOnDestroy(): void {
@@ -60,60 +62,45 @@ export class FormTenant implements OnInit, OnDestroy {
     }
   
     getTenant() {
-      // this.spinnerService.show();
+      this.spinnerService.show();
     
-      // this.parteService.getParteById(this.data.parteId)
-      //   .pipe(takeUntil(this.destroy$))
-      //   .subscribe({
-      //     next: (res) => {
-      //       // Preenche os campos do formulário com os dados recebidos
-      //       this.formPartes.get('nome')?.setValue(res.nome);
-      //       this.formPartes.get('tipoPessoa')?.setValue(res.tipoPessoa);
-      //       this.formPartes.get('cpfCnpj')?.setValue(res.cpfCnpj);
-      //       this.formPartes.get('telefone')?.setValue(res.telefone);
-      //       this.formPartes.get('email')?.setValue(res.email);
-      //       this.formPartes.get('isCliente')?.setValue(res.isCliente);
-    
-      //       if (res.dataNascimento) {
-      //         this.formPartes.get('dataNascimento')?.setValue(new Date(res.dataNascimento));
-      //       }
-    
-      //       if (res.endereco) {
-      //         this.formPartes.get('endereco.cep')?.setValue(res.endereco.cep);
-      //         this.formPartes.get('endereco.logradouro')?.setValue(res.endereco.logradouro);
-      //         this.formPartes.get('endereco.numero')?.setValue(res.endereco.numero);
-      //         this.formPartes.get('endereco.estado')?.setValue(res.endereco.estadoId);
-      //         this.formPartes.get('endereco.bairro')?.setValue(res.endereco.bairro);
-      //         this.enderecoId = res.endereco.id;
-    
-      //         // Busca as cidades para preencher o campo de cidade
-      //         const estadoId = this.formPartes.get('endereco.estado')?.value;
-      //         const cidadeObservable = this.estadoService.getCidades(estadoId);
-      //         if (cidadeObservable) {
-      //           cidadeObservable.subscribe({
-      //             next: (response) => {
-      //               this.cidades = response;
-      //               this.formPartes.get('endereco.cidade')?.setValue(res.endereco.cidadeId);
-      //             },
-      //             complete: () => {
-      //               this.spinnerService.hide();
-      //             },
-      //             error: () => {
-      //               this.spinnerService.hide();
-      //             }
-      //           });
-      //         } else {
-      //           this.spinnerService.hide(); // Caso não haja necessidade de buscar cidades, o spinner é escondido
-      //         }
-      //       } else {
-      //         // Se não houver endereço, esconda o spinner imediatamente
-      //         this.spinnerService.hide();
-      //       }
-      //     },
-      //     error: () => {
-      //       this.spinnerService.hide();
-      //     }
-      //   });
+      this.tenantService.getTenantById(this.data.tenantId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (res) => {
+            
+            this.formTenant.get('name')?.setValue(res.name);
+            if(this.formTenant.get('tipoPessoa')?.value.length > 11){
+              this.formTenant.get('tipoPessoa')?.setValue('PESSOA_JURIDICA');
+            }else{
+              this.formTenant.get('tipoPessoa')?.setValue('PESSOA_FISICA');
+            }
+            this.formTenant.get('email')?.setValue(res.email);
+
+            this.formTenant.get('document')?.setValue(res.document);
+            this.formTenant.get('phoneNumber')?.setValue(res.phoneNumber);
+            this.formTenant.get('domain')?.setValue(res.domain);
+
+            this.formTenant.get('address.addressZipCode')?.setValue(res.addressZipCode);
+            this.formTenant.get('address.addressStreet')?.setValue(res.addressCity);
+            this.formTenant.get('address.addressNumber')?.setValue(res.addressNumber);
+            this.formTenant.get('address.addressComplement')?.setValue(res.addressComplement);
+            this.formTenant.get('address.addressDistrict')?.setValue(res.addressDistrict);
+            this.formTenant.get('address.addressCity')?.setValue(res.addressCity);
+            this.formTenant.get('address.addressState')?.setValue(res.addressState);
+            
+            this.formTenant.get('address.addressStreet')?.disable();
+            this.formTenant.get('address.addressDistrict')?.disable();
+            this.formTenant.get('address.addressCity')?.disable();
+            this.formTenant.get('address.addressState')?.disable();
+          },
+          error: () => {
+            this.spinnerService.hide();
+          },
+          complete: () => {
+            this.spinnerService.hide();
+          }
+        });
     }
   
     getCep() {
