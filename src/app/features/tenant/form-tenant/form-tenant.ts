@@ -70,7 +70,7 @@ export class FormTenant implements OnInit, OnDestroy {
           next: (res) => {
             
             this.formTenant.get('name')?.setValue(res.name);
-            if(this.formTenant.get('tipoPessoa')?.value.length > 11){
+            if(res.document.length > 11){
               this.formTenant.get('tipoPessoa')?.setValue('PESSOA_JURIDICA');
             }else{
               this.formTenant.get('tipoPessoa')?.setValue('PESSOA_FISICA');

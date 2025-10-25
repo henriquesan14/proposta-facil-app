@@ -103,21 +103,21 @@ export class ListClient implements OnInit, OnDestroy {
     }
   
     openEditClientModal(client: Client): void {
-      // const modal = this.modal.create({
-      //   nzTitle: 'Editar usuário',
-      //   nzContent: FormUserComponent,
-      //   nzWidth: '800px',
-      //   nzData:{
-      //     userToEdit: user
-      //   },
-      //   nzFooter: null
-      // });
+      const modal = this.modal.create({
+        nzTitle: 'Editar cliente',
+        nzContent: FormClient,
+        nzWidth: '800px',
+        nzData:{
+          clientId: client.id
+        },
+        nzFooter: null
+      });
       
-      // modal.afterClose.subscribe((result) => {
-      //   if (result) {
-      //     this.getUsers();
-      //   }
-      // });
+      modal.afterClose.subscribe((result) => {
+        if (result) {
+          this.getClients();
+        }
+      });
     }
 
     openViewClientModal(clientId: string): void {

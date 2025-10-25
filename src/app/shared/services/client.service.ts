@@ -28,19 +28,15 @@ export class ClientService {
   }
   
 
-  createClient(user: Client): Observable<Client>{
-    return this.http.post<Client>(`${this.API}/`, user);
+  createClient(client: Client): Observable<Client>{
+    return this.http.post<Client>(`${this.API}/`, client);
   }
 
-  updateClient(user: Client){
-    return this.http.put(`${this.API}/`, user);
+  updateClient(client: Client){
+    return this.http.put(`${this.API}/`, client);
   }
 
   deleteClient(id: string){
     return this.http.delete(`${this.API}/${id}`,);
-  }
-
-  deleteClientsBatch(userIds: string[]){
-    return this.http.post(`${this.API}/delete`, {userIds});
   }
 }
